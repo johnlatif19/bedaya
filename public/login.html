@@ -430,18 +430,18 @@
     }
 
     // ==================== التحقق من التوكن المسبق ====================
-    const adminToken = localStorage.getItem('adminToken');
-    if (adminToken) {
+    const existingToken = localStorage.getItem('token');
+    if (existingToken) {
       fetch('/api/admin/verify-token', {
-        headers: { 'Authorization': `Bearer ${adminToken}` }
+        headers: { 'Authorization': `Bearer ${existingToken}` }
       }).then(res => {
         if (res.ok) {
           window.location.href = '/dashboard';
         } else {
-          localStorage.removeItem('adminToken');
+          localStorage.removeItem('token');
         }
       }).catch(() => {
-        localStorage.removeItem('adminToken');
+        localStorage.removeItem('token');
       });
     }
 
@@ -496,7 +496,7 @@
           const result = await res.json();
           
           if (res.ok && result.token) {
-            localStorage.setItem('adminToken', result.token);
+            localStorage.setItem('token', result.token);
             
             const verifyRes = await fetch('/api/admin/verify-token', {
               headers: { 'Authorization': `Bearer ${result.token}` }
@@ -511,7 +511,7 @@
               }, 500);
             } else {
               showError('فشل التحقق من الصلاحية');
-              localStorage.removeItem('adminToken');
+              localStorage.removeItem('token');
               if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>تسجيل الدخول</span>';
