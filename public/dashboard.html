@@ -11,7 +11,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   
-  <!-- Chart.js للرسوم البيانية -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   
   <script>
@@ -56,7 +56,6 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
 
-    /* تخصيص السكرول بار */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -73,7 +72,33 @@
       background: #1e293b;
     }
 
-    /* بطاقات احصاءات */
+    .sidebar {
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-item {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .sidebar-item:hover {
+      background: rgba(79, 70, 229, 0.1);
+      transform: translateX(-5px);
+    }
+    
+    .sidebar-item.active {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+    }
+    
+    .dark .sidebar-item.active {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+    
+    .sidebar-item i {
+      width: 24px;
+    }
+
     .stat-card {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -82,22 +107,16 @@
       box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
     }
 
-    /* جدول */
-    .data-table {
-      transition: all 0.3s ease;
-    }
     .data-table tbody tr {
       transition: all 0.2s ease;
     }
     .data-table tbody tr:hover {
       background: rgba(79, 70, 229, 0.05);
-      transform: scale(1.01);
     }
     .dark .data-table tbody tr:hover {
       background: rgba(79, 70, 229, 0.1);
     }
 
-    /* أزرار */
     .btn-action {
       transition: all 0.2s ease;
     }
@@ -105,7 +124,6 @@
       transform: translateY(-2px);
     }
 
-    /* منطقة رفع الملفات */
     .upload-zone {
       transition: all 0.3s ease;
       cursor: pointer;
@@ -114,11 +132,7 @@
       border-color: #4f46e5;
       background: rgba(79, 70, 229, 0.05);
     }
-    .dark .upload-zone:hover {
-      background: rgba(79, 70, 229, 0.1);
-    }
 
-    /* تأثيرات التحميل */
     .loading-overlay {
       position: fixed;
       top: 0;
@@ -151,7 +165,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* الرسائل */
     .toast-message {
       position: fixed;
       bottom: 20px;
@@ -170,7 +183,6 @@
       }
     }
 
-    /* نموذج التعديل */
     .edit-modal {
       position: fixed;
       top: 0;
@@ -201,289 +213,30 @@
       transform: scale(1);
     }
 
-    /* تصفية الجداول */
-    .search-input {
-      transition: all 0.3s ease;
-    }
     .search-input:focus {
       transform: translateY(-2px);
     }
+
+    .page-content {
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
-<body class="font-sans antialiased">
+<body>
 
-  <!-- شريط التنقل العلوي -->
-  <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-3">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
-            <i class="fas fa-hand-sparkles text-white text-lg"></i>
-          </div>
-          <div>
-            <h1 class="text-xl font-bold text-gray-800 dark:text-white">لوحة تحكم بداية</h1>
-            <p class="text-xs text-gray-500 dark:text-gray-400">مركز التدخل المبكر والتأهيل</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <button id="themeToggle" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition-all hover:scale-110">
-            <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300"></i>
-          </button>
-          <button id="logoutBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all flex items-center gap-2">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="hidden sm:inline">تسجيل خروج</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container mx-auto px-4 py-6">
-    
-    <!-- بطاقات الإحصائيات -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي المبيعات اليوم</p>
-            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">
-              <span id="todayTotal">0</span> <span class="text-sm">ج.م</span>
-            </p>
-          </div>
-          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
-            <i class="fas fa-chart-line text-green-600 text-xl"></i>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">عدد المستخدمين</p>
-            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2" id="usersCount">0</p>
-          </div>
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
-            <i class="fas fa-users text-blue-600 text-xl"></i>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">عدد الحجوزات</p>
-            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2" id="bookingsCount">0</p>
-          </div>
-          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center">
-            <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">النتائج المرفوعة</p>
-            <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2" id="resultsCount">0</p>
-          </div>
-          <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
-            <i class="fas fa-file-alt text-orange-600 text-xl"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- قسم المبيعات -->
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg mb-8 overflow-hidden">
-      <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-          <i class="fas fa-chart-simple ml-2 text-indigo-500"></i> نظام المبيعات
-        </h2>
-      </div>
-      <div class="p-6">
-        <form id="salesForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <input type="text" id="customerName" placeholder="اسم العميل" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-          <input type="number" id="saleAmount" placeholder="المبلغ (ج.م)" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-          <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-            <i class="fas fa-plus ml-2"></i> تسجيل بيع
-          </button>
-        </form>
-        
-        <div class="flex justify-between items-center mb-4">
-          <button id="viewSalesBtn" class="px-4 py-2 bg-green-500 text-white rounded-lg transition-all hover:bg-green-600">
-            <i class="fas fa-list ml-2"></i> عرض سجلات المبيعات
-          </button>
-          <input type="text" id="searchSales" placeholder="بحث في المبيعات..." class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-64 search-input" />
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table id="salesTable" class="data-table w-full hidden">
-            <thead class="bg-indigo-50 dark:bg-indigo-900/30">
-              <tr>
-                <th class="px-4 py-3 text-right">اسم العميل</th>
-                <th class="px-4 py-3 text-right">المبلغ</th>
-                <th class="px-4 py-3 text-right">وقت البيع</th>
-                <th class="px-4 py-3 text-right">الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- المستخدمين والرسائل -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-      <!-- المستخدمين -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-        <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-users ml-2 text-blue-500"></i> المستخدمين
-          </h2>
-        </div>
-        <div class="p-6">
-          <input type="text" id="searchUsers" placeholder="بحث في المستخدمين..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-          <div class="overflow-x-auto max-h-96 overflow-y-auto">
-            <table id="usersTable" class="data-table w-full">
-              <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
-                <tr>
-                  <th class="px-3 py-2 text-right">الاسم</th>
-                  <th class="px-3 py-2 text-right">البريد</th>
-                  <th class="px-3 py-2 text-right">الهاتف</th>
-                  <th class="px-3 py-2 text-right">الإجراءات</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      
-      <!-- الحجوزات -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-        <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-calendar-check ml-2 text-purple-500"></i> الحجوزات
-          </h2>
-        </div>
-        <div class="p-6">
-          <input type="text" id="searchBookings" placeholder="بحث في الحجوزات..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-          <div class="overflow-x-auto max-h-96 overflow-y-auto">
-            <table id="bookingsTable" class="data-table w-full">
-              <thead class="bg-purple-50 dark:bg-purple-900/30 sticky top-0">
-                <tr>
-                  <th class="px-3 py-2 text-right">الاسم</th>
-                  <th class="px-3 py-2 text-right">الهاتف</th>
-                  <th class="px-3 py-2 text-right">التاريخ</th>
-                  <th class="px-3 py-2 text-right">الوقت</th>
-                  <th class="px-3 py-2 text-right">حذف</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- النتائج -->
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg mb-8">
-      <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-          <i class="fas fa-file-alt ml-2 text-orange-500"></i> النتائج المرفوعة
-        </h2>
-      </div>
-      <div class="p-6">
-        <input type="text" id="searchResults" placeholder="بحث في النتائج..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-        <div class="overflow-x-auto">
-          <table id="resultsTable" class="data-table w-full">
-            <thead class="bg-orange-50 dark:bg-orange-900/30">
-              <tr>
-                <th class="px-4 py-3 text-right">رقم التليفون</th>
-                <th class="px-4 py-3 text-right">النتيجة</th>
-                <th class="px-4 py-3 text-right">تاريخ الرفع</th>
-                <th class="px-4 py-3 text-right">الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- رفع نتائج جديدة -->
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg mb-8">
-      <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-          <i class="fas fa-upload ml-2 text-green-500"></i> رفع نتائج جديدة
-        </h2>
-      </div>
-      <div class="p-6">
-        <form id="uploadResultForm" class="space-y-4">
-          <input type="tel" id="resultPhone" placeholder="رقم هاتف العميل" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-          
-          <div class="upload-zone border-2 border-dashed border-indigo-300 dark:border-indigo-700 rounded-xl p-8 text-center">
-            <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400 mb-3"></i>
-            <p class="text-gray-600 dark:text-gray-400">اسحب وأسقط ملف النتيجة هنا أو</p>
-            <input type="file" id="resultFile" class="mt-3 text-center mx-auto block" required />
-          </div>
-          
-          <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-            <i class="fas fa-cloud-upload-alt ml-2"></i> رفع النتيجة
-          </button>
-        </form>
-        <p id="uploadResponse" class="response mt-4 text-center"></p>
-      </div>
-    </div>
-
-    <!-- الرسائل -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- إرسال رسالة -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-        <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-paper-plane ml-2 text-indigo-500"></i> إرسال رسالة
-          </h2>
-        </div>
-        <div class="p-6">
-          <form id="messageForm" class="space-y-4">
-            <input type="email" id="emailInput" placeholder="البريد الإلكتروني للمستخدم" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-            <textarea id="messageInput" rows="4" placeholder="نص الرسالة..." class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required></textarea>
-            <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-              <i class="fas fa-paper-plane ml-2"></i> إرسال
-            </button>
-          </form>
-          <p id="sendResponse" class="response mt-4 text-center"></p>
-        </div>
-      </div>
-      
-      <!-- الرسائل المرسلة -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-        <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-envelope ml-2 text-blue-500"></i> الرسائل المرسلة
-          </h2>
-        </div>
-        <div class="p-6">
-          <div class="overflow-x-auto max-h-96 overflow-y-auto">
-            <table id="sentMessagesTable" class="data-table w-full">
-              <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
-                <tr>
-                  <th class="px-3 py-2 text-right">البريد</th>
-                  <th class="px-3 py-2 text-right">الرسالة</th>
-                  <th class="px-3 py-2 text-right">التاريخ</th>
-                  <th class="px-3 py-2 text-right">حذف</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
   </div>
 
-  <!-- نموذج تعديل (Modal) -->
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
+
+  <!-- Edit Modal -->
   <div id="editModal" class="edit-modal">
     <div class="edit-modal-content bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6">
       <h3 class="text-xl font-bold mb-4" id="editModalTitle">تعديل</h3>
@@ -495,22 +248,100 @@
     </div>
   </div>
 
-  <!-- Toast messages -->
-  <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
+  <div class="flex h-screen overflow-hidden">
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar w-72 bg-white dark:bg-gray-800 shadow-2xl flex flex-col overflow-y-auto z-20">
+      <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-hand-sparkles text-white text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-white">مركز بداية</h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400">لوحة التحكم</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex-1 py-6">
+        <div class="px-4 mb-4">
+          <button id="sidebarDarkToggle" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
+            <span class="flex items-center gap-3">
+              <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300"></i>
+              <span>الوضع الداكن</span>
+            </span>
+            <i class="fas fa-toggle-off text-gray-500 dark:hidden"></i>
+            <i class="fas fa-toggle-on text-indigo-500 hidden dark:inline"></i>
+          </button>
+        </div>
+        
+        <nav class="space-y-1 px-3">
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="dashboard">
+            <i class="fas fa-chart-pie w-5"></i>
+            <span>الرئيسية</span>
+          </div>
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="sales">
+            <i class="fas fa-chart-line w-5"></i>
+            <span>المبيعات</span>
+          </div>
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="users">
+            <i class="fas fa-users w-5"></i>
+            <span>المستخدمين</span>
+          </div>
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="bookings">
+            <i class="fas fa-calendar-check w-5"></i>
+            <span>الحجوزات</span>
+          </div>
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="results">
+            <i class="fas fa-file-alt w-5"></i>
+            <span>النتائج</span>
+          </div>
+          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="messages">
+            <i class="fas fa-envelope w-5"></i>
+            <span>الرسائل</span>
+          </div>
+        </nav>
+      </div>
+      
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        <button id="logoutBtnSidebar" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white transition-all">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>تسجيل خروج</span>
+        </button>
+      </div>
+    </aside>
 
-  <!-- Loading overlay -->
-  <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-spinner"></div>
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-1 overflow-y-auto">
+      <!-- Header -->
+      <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm sticky top-0 z-10">
+        <div class="px-6 py-4 flex justify-between items-center">
+          <h2 id="pageTitle" class="text-2xl font-bold text-gray-800 dark:text-white">الرئيسية</h2>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-user-circle text-2xl text-gray-500 dark:text-gray-400"></i>
+              <span class="text-gray-700 dark:text-gray-300" id="adminName">أدمن</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="p-6" id="mainContent">
+        <!-- الصفحات سيتم تحميلها ديناميكياً هنا -->
+      </div>
+    </main>
   </div>
 
   <script>
     // ==================== المتغيرات العامة ====================
+    let currentPage = 'dashboard';
     let currentEditType = null;
     let currentEditId = null;
     let salesData = [];
     let usersData = [];
     let bookingsData = [];
     let resultsData = [];
+    let messagesData = [];
 
     // ==================== دوال مساعدة ====================
     function showToast(message, type = 'success') {
@@ -560,7 +391,6 @@
     async function loadSales() {
       const isValid = await checkTokenValidity();
       if (!isValid) return;
-
       try {
         const res = await fetch('/api/admin/sales/today', {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -568,11 +398,409 @@
         if (!res.ok) throw new Error();
         const { sales, todayTotal } = await res.json();
         salesData = sales;
-        document.getElementById('todayTotal').textContent = todayTotal || '0';
-        renderSalesTable(salesData);
+        return { sales, todayTotal };
       } catch (error) {
         console.error('Error loading sales:', error);
+        return { sales: [], todayTotal: 0 };
       }
+    }
+
+    async function loadUsers() {
+      const isValid = await checkTokenValidity();
+      if (!isValid) return [];
+      try {
+        const res = await fetch('/api/admin/users', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error();
+        usersData = await res.json();
+        return usersData;
+      } catch (error) {
+        console.error('Error loading users:', error);
+        return [];
+      }
+    }
+
+    async function loadBookings() {
+      const isValid = await checkTokenValidity();
+      if (!isValid) return [];
+      try {
+        const res = await fetch('/api/admin/bookings', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error();
+        bookingsData = await res.json();
+        return bookingsData;
+      } catch (error) {
+        console.error('Error loading bookings:', error);
+        return [];
+      }
+    }
+
+    async function loadResults() {
+      const isValid = await checkTokenValidity();
+      if (!isValid) return [];
+      try {
+        const res = await fetch('/api/admin/results', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error();
+        resultsData = await res.json();
+        return resultsData;
+      } catch (error) {
+        console.error('Error loading results:', error);
+        return [];
+      }
+    }
+
+    async function loadMessages() {
+      const isValid = await checkTokenValidity();
+      if (!isValid) return [];
+      try {
+        const res = await fetch('/api/admin/messages', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error();
+        messagesData = await res.json();
+        return messagesData;
+      } catch (error) {
+        console.error('Error loading messages:', error);
+        return [];
+      }
+    }
+
+    // ==================== دوال العرض ====================
+    function renderDashboardPage(salesTodayTotal, usersCount, bookingsCount, resultsCount) {
+      return `
+        <div class="page-content">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي المبيعات اليوم</p>
+                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${salesTodayTotal} <span class="text-sm">ج.م</span></p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
+                  <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">عدد المستخدمين</p>
+                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${usersCount}</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
+                  <i class="fas fa-users text-blue-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">عدد الحجوزات</p>
+                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${bookingsCount}</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center">
+                  <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">النتائج المرفوعة</p>
+                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${resultsCount}</p>
+                </div>
+                <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
+                  <i class="fas fa-file-alt text-orange-600 text-xl"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 class="text-lg font-bold mb-4">مرحباً بك في لوحة التحكم</h3>
+            <p class="text-gray-600 dark:text-gray-400">يمكنك التنقل بين الأقسام من القائمة الجانبية لإدارة المبيعات والمستخدمين والحجوزات والنتائج والرسائل.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSalesPage() {
+      return `
+        <div class="page-content">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-chart-simple ml-2 text-indigo-500"></i> نظام المبيعات
+              </h2>
+            </div>
+            <div class="p-6">
+              <form id="salesForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <input type="text" id="customerName" placeholder="اسم العميل" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
+                <input type="number" id="saleAmount" placeholder="المبلغ (ج.م)" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
+                <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
+                  <i class="fas fa-plus ml-2"></i> تسجيل بيع
+                </button>
+              </form>
+              
+              <div class="flex justify-between items-center mb-4">
+                <button id="viewSalesBtn" class="px-4 py-2 bg-green-500 text-white rounded-lg transition-all hover:bg-green-600">
+                  <i class="fas fa-list ml-2"></i> عرض سجلات المبيعات
+                </button>
+                <input type="text" id="searchSales" placeholder="بحث في المبيعات..." class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-64 search-input" />
+              </div>
+              
+              <div class="overflow-x-auto">
+                <table id="salesTable" class="data-table w-full hidden">
+                  <thead class="bg-indigo-50 dark:bg-indigo-900/30">
+                    <tr>
+                      <th class="px-4 py-3 text-right">اسم العميل</th>
+                      <th class="px-4 py-3 text-right">المبلغ</th>
+                      <th class="px-4 py-3 text-right">وقت البيع</th>
+                      <th class="px-4 py-3 text-right">الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderUsersPage() {
+      return `
+        <div class="page-content">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-users ml-2 text-blue-500"></i> المستخدمين
+              </h2>
+            </div>
+            <div class="p-6">
+              <input type="text" id="searchUsers" placeholder="بحث في المستخدمين..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
+              <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                <table id="usersTable" class="data-table w-full">
+                  <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
+                    <tr>
+                      <th class="px-3 py-2 text-right">الاسم</th>
+                      <th class="px-3 py-2 text-right">البريد</th>
+                      <th class="px-3 py-2 text-right">الهاتف</th>
+                      <th class="px-3 py-2 text-right">الرسائل</th>
+                      <th class="px-3 py-2 text-right">الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBookingsPage() {
+      return `
+        <div class="page-content">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-calendar-check ml-2 text-purple-500"></i> الحجوزات
+              </h2>
+            </div>
+            <div class="p-6">
+              <input type="text" id="searchBookings" placeholder="بحث في الحجوزات..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
+              <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                <table id="bookingsTable" class="data-table w-full">
+                  <thead class="bg-purple-50 dark:bg-purple-900/30 sticky top-0">
+                    <tr>
+                      <th class="px-3 py-2 text-right">الاسم</th>
+                      <th class="px-3 py-2 text-right">الهاتف</th>
+                      <th class="px-3 py-2 text-right">التاريخ</th>
+                      <th class="px-3 py-2 text-right">الوقت</th>
+                      <th class="px-3 py-2 text-right">حذف</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResultsPage() {
+      return `
+        <div class="page-content">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg mb-8">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-file-alt ml-2 text-orange-500"></i> النتائج المرفوعة
+              </h2>
+            </div>
+            <div class="p-6">
+              <input type="text" id="searchResults" placeholder="بحث في النتائج..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
+              <div class="overflow-x-auto">
+                <table id="resultsTable" class="data-table w-full">
+                  <thead class="bg-orange-50 dark:bg-orange-900/30">
+                    <tr>
+                      <th class="px-4 py-3 text-right">رقم التليفون</th>
+                      <th class="px-4 py-3 text-right">النتيجة</th>
+                      <th class="px-4 py-3 text-right">تاريخ الرفع</th>
+                      <th class="px-4 py-3 text-right">الإجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-upload ml-2 text-green-500"></i> رفع نتائج جديدة
+              </h2>
+            </div>
+            <div class="p-6">
+              <form id="uploadResultForm" class="space-y-4">
+                <input type="tel" id="resultPhone" placeholder="رقم هاتف العميل" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
+                
+                <div class="upload-zone border-2 border-dashed border-indigo-300 dark:border-indigo-700 rounded-xl p-8 text-center">
+                  <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400 mb-3"></i>
+                  <p class="text-gray-600 dark:text-gray-400">اسحب وأسقط ملف النتيجة هنا أو</p>
+                  <input type="file" id="resultFile" class="mt-3 text-center mx-auto block" required />
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
+                  <i class="fas fa-cloud-upload-alt ml-2"></i> رفع النتيجة
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMessagesPage() {
+      return `
+        <div class="page-content">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+              <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                  <i class="fas fa-paper-plane ml-2 text-indigo-500"></i> إرسال رسالة
+                </h2>
+              </div>
+              <div class="p-6">
+                <form id="messageForm" class="space-y-4">
+                  <input type="email" id="emailInput" placeholder="البريد الإلكتروني للمستخدم" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
+                  <textarea id="messageInput" rows="4" placeholder="نص الرسالة..." class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required></textarea>
+                  <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
+                    <i class="fas fa-paper-plane ml-2"></i> إرسال
+                  </button>
+                </form>
+              </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+              <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+                  <i class="fas fa-envelope ml-2 text-blue-500"></i> الرسائل المرسلة
+                </h2>
+              </div>
+              <div class="p-6">
+                <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                  <table id="sentMessagesTable" class="data-table w-full">
+                    <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
+                      <tr>
+                        <th class="px-3 py-2 text-right">البريد</th>
+                        <th class="px-3 py-2 text-right">الرسالة</th>
+                        <th class="px-3 py-2 text-right">التاريخ</th>
+                        <th class="px-3 py-2 text-right">حذف</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderUsersTable() {
+      const tbody = document.querySelector('#usersTable tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      usersData.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.name || '-'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${user.email || '-'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.phone || '-'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${user.messages || 'لا توجد رسائل'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteUser('${encodeURIComponent(user.email)}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderBookingsTable() {
+      const tbody = document.querySelector('#bookingsTable tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      bookingsData.forEach(booking => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.name}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.phone}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.date}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.time}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteBooking('${encodeURIComponent(booking.phone)}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderResultsTable() {
+      const tbody = document.querySelector('#resultsTable tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      resultsData.forEach(result => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${result.phone}</td>
+          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <a href="${result.fileUrl}" target="_blank" class="text-indigo-500 hover:underline">
+              <i class="fas fa-eye ml-1"></i> عرض
+            </a>
+          </td>
+          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(result.uploadedAt).toLocaleString('ar-EG')}</td>
+          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editResult('${encodeURIComponent(result.phone)}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteResult('${encodeURIComponent(result.phone)}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     function renderSalesTable(data) {
@@ -598,155 +826,24 @@
       });
     }
 
-    async function loadUsers() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-
-      try {
-        const res = await fetch('/api/admin/users', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        usersData = await res.json();
-        document.getElementById('usersCount').textContent = usersData.length;
-        renderUsersTable(usersData);
-      } catch (error) {
-        console.error('Error loading users:', error);
-      }
-    }
-
-    function renderUsersTable(data) {
-      const tbody = document.querySelector('#usersTable tbody');
+    function renderMessagesTable() {
+      const tbody = document.querySelector('#sentMessagesTable tbody');
       if (!tbody) return;
       tbody.innerHTML = '';
-      data.forEach(user => {
+      messagesData.forEach((msg, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.name}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${user.email}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.phone}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${msg.email || '-'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${msg.message || '-'}</td>
+          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${msg.sentAt ? new Date(msg.sentAt).toLocaleString('ar-EG') : '-'}</td>
           <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteUser('${encodeURIComponent(user.email)}')">
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteMessage('${msg.id}')">
               <i class="fas fa-trash"></i>
             </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
-    }
-
-    async function loadBookings() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-
-      try {
-        const res = await fetch('/api/admin/bookings', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        bookingsData = await res.json();
-        document.getElementById('bookingsCount').textContent = bookingsData.length;
-        renderBookingsTable(bookingsData);
-      } catch (error) {
-        console.error('Error loading bookings:', error);
-      }
-    }
-
-    function renderBookingsTable(data) {
-      const tbody = document.querySelector('#bookingsTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(booking => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.name}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.phone}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.date}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.time}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteBooking('${encodeURIComponent(booking.phone)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function loadResults() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-
-      try {
-        const res = await fetch('/api/admin/results', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        resultsData = await res.json();
-        document.getElementById('resultsCount').textContent = resultsData.length;
-        renderResultsTable(resultsData);
-      } catch (error) {
-        console.error('Error loading results:', error);
-      }
-    }
-
-    function renderResultsTable(data) {
-      const tbody = document.querySelector('#resultsTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(result => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${result.phone}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <a href="${result.fileUrl}" target="_blank" class="text-indigo-500 hover:underline">
-              <i class="fas fa-eye ml-1"></i> عرض
-            </a>
-          </td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(result.uploadedAt).toLocaleString('ar-EG')}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editResult('${encodeURIComponent(result.phone)}')">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteResult('${encodeURIComponent(result.phone)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function loadMessages() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-
-      try {
-        const res = await fetch('/api/admin/messages', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        const messages = await res.json();
-        const tbody = document.querySelector('#sentMessagesTable tbody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        messages.forEach((msg, idx) => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${msg.email}</td>
-            <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 message-content">${msg.message}</td>
-            <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${new Date(msg.sentAt).toLocaleString('ar-EG')}</td>
-            <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-              <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteMessage(${idx})">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (error) {
-        console.error('Error loading messages:', error);
-      }
     }
 
     // ==================== دوال الحذف والتعديل ====================
@@ -773,7 +870,7 @@
         });
         if (res.ok) {
           showToast('تم الحذف بنجاح');
-          loadSales();
+          await refreshCurrentPage();
         } else {
           showToast('حدث خطأ أثناء الحذف', 'error');
         }
@@ -793,7 +890,7 @@
         });
         if (res.ok) {
           showToast('تم الحذف بنجاح');
-          loadUsers();
+          await refreshCurrentPage();
         } else {
           showToast('حدث خطأ أثناء الحذف', 'error');
         }
@@ -813,7 +910,7 @@
         });
         if (res.ok) {
           showToast('تم الحذف بنجاح');
-          loadBookings();
+          await refreshCurrentPage();
         } else {
           showToast('حدث خطأ أثناء الحذف', 'error');
         }
@@ -833,7 +930,7 @@
         });
         if (res.ok) {
           showToast('تم الحذف بنجاح');
-          loadResults();
+          await refreshCurrentPage();
         } else {
           showToast('حدث خطأ أثناء الحذف', 'error');
         }
@@ -843,17 +940,17 @@
       hideLoading();
     };
 
-    window.deleteMessage = async (index) => {
+    window.deleteMessage = async (id) => {
       if (!confirm('هل أنت متأكد من حذف هذه الرسالة؟')) return;
       showLoading();
       try {
-        const res = await fetch(`/api/admin/message/${index}`, {
+        const res = await fetch(`/api/admin/message/${id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         if (res.ok) {
           showToast('تم الحذف بنجاح');
-          loadMessages();
+          await refreshCurrentPage();
         } else {
           showToast('حدث خطأ أثناء الحذف', 'error');
         }
@@ -875,102 +972,338 @@
       document.getElementById('editModal').classList.add('active');
     };
 
-    // ==================== إرسال النماذج ====================
-    document.getElementById('salesForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const customerName = document.getElementById('customerName').value.trim();
-      const amount = document.getElementById('saleAmount').value.trim();
-      if (!customerName || !amount) {
-        showToast('يرجى إدخال جميع البيانات', 'error');
-        return;
+    // ==================== تحديث الصفحة الحالية ====================
+    async function refreshCurrentPage() {
+      await loadAllData();
+      
+      if (currentPage === 'dashboard') {
+        const salesResult = await loadSales();
+        document.getElementById('mainContent').innerHTML = renderDashboardPage(
+          salesResult.todayTotal, 
+          usersData.length, 
+          bookingsData.length, 
+          resultsData.length
+        );
+      } else if (currentPage === 'sales') {
+        document.getElementById('mainContent').innerHTML = renderSalesPage();
+        await loadSales();
+        renderSalesTable(salesData);
+        attachSalesEvents();
+      } else if (currentPage === 'users') {
+        document.getElementById('mainContent').innerHTML = renderUsersPage();
+        renderUsersTable();
+        attachUsersEvents();
+      } else if (currentPage === 'bookings') {
+        document.getElementById('mainContent').innerHTML = renderBookingsPage();
+        renderBookingsTable();
+        attachBookingsEvents();
+      } else if (currentPage === 'results') {
+        document.getElementById('mainContent').innerHTML = renderResultsPage();
+        renderResultsTable();
+        attachResultsEvents();
+      } else if (currentPage === 'messages') {
+        document.getElementById('mainContent').innerHTML = renderMessagesPage();
+        renderMessagesTable();
+        attachMessagesEvents();
       }
-      showLoading();
-      try {
-        const res = await fetch('/api/admin/sales', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ customerName, amount: parseFloat(amount) })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message);
-          document.getElementById('salesForm').reset();
-          loadSales();
-        } else {
-          showToast(data.error || 'حدث خطأ', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    });
+    }
 
-    document.getElementById('uploadResultForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const phone = document.getElementById('resultPhone').value.trim();
-      const file = document.getElementById('resultFile').files[0];
-      if (!phone || !file) {
-        showToast('يرجى إدخال رقم الهاتف واختيار ملف', 'error');
-        return;
-      }
-      showLoading();
-      const formData = new FormData();
-      formData.append('phone', phone);
-      formData.append('resultFile', file);
-      try {
-        const res = await fetch('/api/upload-result', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-          body: formData
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message);
-          document.getElementById('uploadResultForm').reset();
-          loadResults();
-        } else {
-          showToast(data.error || 'حدث خطأ', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    });
+    async function loadAllData() {
+      await Promise.all([
+        loadSales(),
+        loadUsers(),
+        loadBookings(),
+        loadResults(),
+        loadMessages()
+      ]);
+    }
 
-    document.getElementById('messageForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('emailInput').value.trim();
-      const message = document.getElementById('messageInput').value.trim();
-      if (!email || !message) {
-        showToast('يرجى إدخال البريد الإلكتروني والرسالة', 'error');
-        return;
-      }
-      showLoading();
-      try {
-        const res = await fetch('/api/admin/message', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ email, message })
+    // ==================== إرفاق الأحداث ====================
+    function attachSalesEvents() {
+      const salesForm = document.getElementById('salesForm');
+      if (salesForm) {
+        salesForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const customerName = document.getElementById('customerName').value.trim();
+          const amount = document.getElementById('saleAmount').value.trim();
+          if (!customerName || !amount) {
+            showToast('يرجى إدخال جميع البيانات', 'error');
+            return;
+          }
+          showLoading();
+          try {
+            const res = await fetch('/api/admin/sales', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ customerName, amount: parseFloat(amount) })
+            });
+            const data = await res.json();
+            if (res.ok) {
+              showToast(data.message);
+              document.getElementById('salesForm').reset();
+              await refreshCurrentPage();
+            } else {
+              showToast(data.error || 'حدث خطأ', 'error');
+            }
+          } catch (error) {
+            showToast('خطأ في الاتصال', 'error');
+          }
+          hideLoading();
         });
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message);
-          document.getElementById('messageForm').reset();
-          loadMessages();
-        } else {
-          showToast(data.error || 'حدث خطأ', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
       }
+
+      const viewSalesBtn = document.getElementById('viewSalesBtn');
+      let salesTableVisible = false;
+      if (viewSalesBtn) {
+        viewSalesBtn.addEventListener('click', () => {
+          const table = document.getElementById('salesTable');
+          salesTableVisible = !salesTableVisible;
+          table.style.display = salesTableVisible ? 'table' : 'none';
+          viewSalesBtn.innerHTML = salesTableVisible ? '<i class="fas fa-eye-slash ml-2"></i> إخفاء السجلات' : '<i class="fas fa-list ml-2"></i> عرض سجلات المبيعات';
+        });
+      }
+
+      const searchSales = document.getElementById('searchSales');
+      if (searchSales) {
+        searchSales.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase();
+          const filtered = salesData.filter(s => s.customerName.toLowerCase().includes(term));
+          renderSalesTable(filtered);
+        });
+      }
+    }
+
+    function attachUsersEvents() {
+      const searchUsers = document.getElementById('searchUsers');
+      if (searchUsers) {
+        searchUsers.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase();
+          const filtered = usersData.filter(u => 
+            (u.name && u.name.toLowerCase().includes(term)) || 
+            (u.email && u.email.toLowerCase().includes(term))
+          );
+          const tbody = document.querySelector('#usersTable tbody');
+          if (!tbody) return;
+          tbody.innerHTML = '';
+          filtered.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.name || '-'}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${user.email || '-'}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.phone || '-'}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${user.messages || 'لا توجد رسائل'}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteUser('${encodeURIComponent(user.email)}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+      }
+    }
+
+    function attachBookingsEvents() {
+      const searchBookings = document.getElementById('searchBookings');
+      if (searchBookings) {
+        searchBookings.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase();
+          const filtered = bookingsData.filter(b => 
+            b.name.toLowerCase().includes(term) || 
+            b.phone.includes(term)
+          );
+          const tbody = document.querySelector('#bookingsTable tbody');
+          if (!tbody) return;
+          tbody.innerHTML = '';
+          filtered.forEach(booking => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.name}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.phone}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.date}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.time}</td>
+              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteBooking('${encodeURIComponent(booking.phone)}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+      }
+    }
+
+    function attachResultsEvents() {
+      const uploadForm = document.getElementById('uploadResultForm');
+      if (uploadForm) {
+        uploadForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const phone = document.getElementById('resultPhone').value.trim();
+          const file = document.getElementById('resultFile').files[0];
+          if (!phone || !file) {
+            showToast('يرجى إدخال رقم الهاتف واختيار ملف', 'error');
+            return;
+          }
+          showLoading();
+          const formData = new FormData();
+          formData.append('phone', phone);
+          formData.append('resultFile', file);
+          try {
+            const res = await fetch('/api/upload-result', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+              body: formData
+            });
+            const data = await res.json();
+            if (res.ok) {
+              showToast(data.message);
+              document.getElementById('uploadResultForm').reset();
+              await refreshCurrentPage();
+            } else {
+              showToast(data.error || 'حدث خطأ', 'error');
+            }
+          } catch (error) {
+            showToast('خطأ في الاتصال', 'error');
+          }
+          hideLoading();
+        });
+      }
+
+      const searchResults = document.getElementById('searchResults');
+      if (searchResults) {
+        searchResults.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase();
+          const filtered = resultsData.filter(r => r.phone.includes(term));
+          const tbody = document.querySelector('#resultsTable tbody');
+          if (!tbody) return;
+          tbody.innerHTML = '';
+          filtered.forEach(result => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${result.phone}</td>
+              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <a href="${result.fileUrl}" target="_blank" class="text-indigo-500 hover:underline">
+                  <i class="fas fa-eye ml-1"></i> عرض
+                </a>
+              </td>
+              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(result.uploadedAt).toLocaleString('ar-EG')}</td>
+              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editResult('${encodeURIComponent(result.phone)}')">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteResult('${encodeURIComponent(result.phone)}')">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+      }
+    }
+
+    function attachMessagesEvents() {
+      const messageForm = document.getElementById('messageForm');
+      if (messageForm) {
+        messageForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('emailInput').value.trim();
+          const message = document.getElementById('messageInput').value.trim();
+          if (!email || !message) {
+            showToast('يرجى إدخال البريد الإلكتروني والرسالة', 'error');
+            return;
+          }
+          showLoading();
+          try {
+            const res = await fetch('/api/admin/message', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ email, message })
+            });
+            const data = await res.json();
+            if (res.ok) {
+              showToast(data.message);
+              document.getElementById('messageForm').reset();
+              await refreshCurrentPage();
+            } else {
+              showToast(data.error || 'حدث خطأ', 'error');
+            }
+          } catch (error) {
+            showToast('خطأ في الاتصال', 'error');
+          }
+          hideLoading();
+        });
+      }
+    }
+
+    // ==================== تبديل الصفحات ====================
+    async function switchToPage(page) {
+      currentPage = page;
+      
+      // تحديث الـ active في القائمة
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        if (item.dataset.page === page) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+      
+      // تحديث عنوان الصفحة
+      const titles = {
+        dashboard: 'الرئيسية',
+        sales: 'المبيعات',
+        users: 'المستخدمين',
+        bookings: 'الحجوزات',
+        results: 'النتائج',
+        messages: 'الرسائل'
+      };
+      document.getElementById('pageTitle').textContent = titles[page] || 'لوحة التحكم';
+      
+      showLoading();
+      
+      await loadAllData();
+      
+      if (page === 'dashboard') {
+        const salesResult = await loadSales();
+        document.getElementById('mainContent').innerHTML = renderDashboardPage(
+          salesResult.todayTotal, 
+          usersData.length, 
+          bookingsData.length, 
+          resultsData.length
+        );
+      } else if (page === 'sales') {
+        document.getElementById('mainContent').innerHTML = renderSalesPage();
+        renderSalesTable(salesData);
+        attachSalesEvents();
+      } else if (page === 'users') {
+        document.getElementById('mainContent').innerHTML = renderUsersPage();
+        renderUsersTable();
+        attachUsersEvents();
+      } else if (page === 'bookings') {
+        document.getElementById('mainContent').innerHTML = renderBookingsPage();
+        renderBookingsTable();
+        attachBookingsEvents();
+      } else if (page === 'results') {
+        document.getElementById('mainContent').innerHTML = renderResultsPage();
+        renderResultsTable();
+        attachResultsEvents();
+      } else if (page === 'messages') {
+        document.getElementById('mainContent').innerHTML = renderMessagesPage();
+        renderMessagesTable();
+        attachMessagesEvents();
+      }
+      
       hideLoading();
-    });
+    }
 
     // ==================== حفظ التعديل ====================
     document.getElementById('saveEditBtn').addEventListener('click', async () => {
@@ -994,7 +1327,7 @@
           const data = await res.json();
           if (res.ok) {
             showToast(data.message);
-            loadSales();
+            await refreshCurrentPage();
             document.getElementById('editModal').classList.remove('active');
           } else {
             showToast(data.error || 'حدث خطأ', 'error');
@@ -1023,7 +1356,7 @@
           const data = await res.json();
           if (res.ok) {
             showToast(data.message);
-            loadResults();
+            await refreshCurrentPage();
             document.getElementById('editModal').classList.remove('active');
           } else {
             showToast(data.error || 'حدث خطأ', 'error');
@@ -1039,63 +1372,8 @@
       document.getElementById('editModal').classList.remove('active');
     });
 
-    // ==================== البحث ====================
-    document.getElementById('searchSales').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = salesData.filter(s => s.customerName.toLowerCase().includes(term));
-      renderSalesTable(filtered);
-    });
-
-    document.getElementById('searchUsers').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = usersData.filter(u => u.name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term));
-      renderUsersTable(filtered);
-    });
-
-    document.getElementById('searchBookings').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = bookingsData.filter(b => b.name.toLowerCase().includes(term) || b.phone.includes(term));
-      renderBookingsTable(filtered);
-    });
-
-    document.getElementById('searchResults').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = resultsData.filter(r => r.phone.includes(term));
-      renderResultsTable(filtered);
-    });
-
-    // ==================== عرض/إخفاء جدول المبيعات ====================
-    let salesTableVisible = false;
-    document.getElementById('viewSalesBtn').addEventListener('click', () => {
-      const table = document.getElementById('salesTable');
-      salesTableVisible = !salesTableVisible;
-      table.style.display = salesTableVisible ? 'table' : 'none';
-      document.getElementById('viewSalesBtn').innerHTML = salesTableVisible ? '<i class="fas fa-eye-slash ml-2"></i> إخفاء السجلات' : '<i class="fas fa-list ml-2"></i> عرض سجلات المبيعات';
-    });
-
-    // ==================== الوضع الداكن ====================
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    if (localStorage.getItem('adminDarkMode') === 'true') {
-      document.documentElement.classList.add('dark');
-      themeIcon.classList.remove('fa-moon');
-      themeIcon.classList.add('fa-sun');
-    }
-    themeToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      const isDark = document.documentElement.classList.contains('dark');
-      localStorage.setItem('adminDarkMode', isDark);
-      if (isDark) {
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-      } else {
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-      }
-    });
-
     // ==================== تسجيل الخروج ====================
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
+    async function logout() {
       if (!confirm('هل أنت متأكد من تسجيل الخروج؟')) return;
       try {
         await fetch('/api/admin/logout', {
@@ -1105,19 +1383,56 @@
       } catch (error) {}
       localStorage.removeItem('token');
       window.location.href = '/login';
-    });
+    }
+    
+    document.getElementById('logoutBtnSidebar').addEventListener('click', logout);
+
+    // ==================== الوضع الداكن ====================
+    function initDarkMode() {
+      const sidebarDarkToggle = document.getElementById('sidebarDarkToggle');
+      const darkIcon = document.getElementById('darkIcon');
+      
+      if (localStorage.getItem('adminDarkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+        if (darkIcon) {
+          darkIcon.classList.remove('fa-moon');
+          darkIcon.classList.add('fa-sun');
+        }
+      }
+      
+      if (sidebarDarkToggle) {
+        sidebarDarkToggle.addEventListener('click', () => {
+          document.documentElement.classList.toggle('dark');
+          const isDark = document.documentElement.classList.contains('dark');
+          localStorage.setItem('adminDarkMode', isDark);
+          if (darkIcon) {
+            if (isDark) {
+              darkIcon.classList.remove('fa-moon');
+              darkIcon.classList.add('fa-sun');
+            } else {
+              darkIcon.classList.remove('fa-sun');
+              darkIcon.classList.add('fa-moon');
+            }
+          }
+        });
+      }
+    }
 
     // ==================== التحميل الأولي ====================
     document.addEventListener('DOMContentLoaded', async () => {
       const isValid = await checkTokenValidity();
       if (!isValid) return;
-      showLoading();
-      try {
-        await Promise.all([loadSales(), loadUsers(), loadBookings(), loadResults(), loadMessages()]);
-      } catch (error) {
-        console.error('Initial load error:', error);
-      }
-      hideLoading();
+      
+      initDarkMode();
+      
+      // إضافة مستمعي الأحداث للقائمة
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', () => {
+          switchToPage(item.dataset.page);
+        });
+      });
+      
+      await switchToPage('dashboard');
     });
   </script>
 </body>
