@@ -4,459 +4,556 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>تسجيل دخول الأدمن | بداية</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Reem+Kufi+Fun:wght@400;500;600;700&display=swap");
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Reem Kufi Fun", sans-serif;
-    }
-
-    :root {
-      --primaryColor: #4f46e5;
-      --primaryHover: #6366f1;
-      --secondColor: #e2e8f0;
-      --backgroundColor: #f1f5f9;
-      --textColor: #1e293b;
-      --cardBg: #ffffff;
-      --borderColor: #e2e8f0;
-    }
-
-    body.dark-mode {
-      --primaryColor: #818cf8;
-      --primaryHover: #a5b4fc;
-      --secondColor: #1e293b;
-      --backgroundColor: #0f172a;
-      --textColor: #f1f5f9;
-      --cardBg: #1e293b;
-      --borderColor: #334155;
     }
 
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Cairo', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, var(--backgroundColor) 0%, var(--secondColor) 100%);
-      color: var(--textColor);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      direction: rtl;
-      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Animated Border Box */
-    .box {
-      position: relative;
-      width: 420px;
-      background: var(--cardBg);
-      transition: 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
-      border-radius: 24px;
+    /* خلفية متحركة خفيفة */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
+      background-size: cover;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* بطاقة تسجيل الدخول */
+    .login-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
       overflow: hidden;
     }
 
-    .box::before,
-    .box::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(0deg, transparent, var(--primaryColor), var(--primaryColor));
-      transform-origin: bottom right;
-      animation: animate 6s linear infinite;
+    .dark .login-card {
+      background: rgba(30, 41, 59, 0.95);
     }
 
-    .box::after {
-      animation-delay: -3s;
-    }
-
-    @keyframes animate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .form {
+    /* تأثير الإدخالات */
+    .input-group {
       position: relative;
-      margin: 3px;
-      border-radius: 24px;
-      background: var(--cardBg);
-      z-index: 10;
-      padding: 40px 35px;
-      display: flex;
-      flex-direction: column;
+      margin-bottom: 1.5rem;
     }
 
-    .form h2 {
-      color: var(--primaryColor);
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: -0.02em;
-      margin-bottom: 30px;
-      font-size: 28px;
-    }
-
-    .inputBox {
-      position: relative;
+    .input-group input {
       width: 100%;
-      margin-top: 25px;
-    }
-
-    .inputBox input {
-      position: relative;
-      width: 100%;
-      padding: 12px 0 12px 0;
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid var(--borderColor);
-      outline: none;
-      color: var(--textColor);
-      font-size: 1em;
-      letter-spacing: 0.05em;
-      z-index: 10;
+      padding: 1rem 3rem 1rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      font-size: 1rem;
       transition: all 0.3s ease;
+      background: white;
+      font-family: 'Cairo', sans-serif;
     }
 
-    .inputBox input:focus {
-      border-bottom-color: var(--primaryColor);
-    }
-
-    .inputBox label {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      color: var(--textColor);
-      transform: translateY(-50%);
-      pointer-events: none;
-      font-size: 1em;
-      letter-spacing: 0.05em;
-      transition: 0.3s ease;
-      opacity: 0.7;
-    }
-
-    .inputBox input:focus~label,
-    .inputBox input:valid~label {
-      top: -5px;
-      font-size: 0.75em;
-      color: var(--primaryColor);
-      opacity: 1;
-    }
-
-    .button {
-      margin-top: 40px;
-      width: 100%;
-    }
-
-    .button button {
-      width: 100%;
-      padding: 12px 0;
-      background-color: var(--primaryColor);
+    .dark .input-group input {
+      background: #1e293b;
+      border-color: #334155;
       color: white;
-      font-weight: 600;
-      font-size: 1.1em;
-      border-radius: 50px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .button button:hover {
-      background-color: var(--primaryHover);
+    .input-group input:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
       transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
-    .button button:disabled {
+    .input-group i {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus + i {
+      color: #4f46e5;
+    }
+
+    /* labels للإدخالات */
+    .input-label {
+      position: absolute;
+      right: 3rem;
+      top: 1rem;
+      color: #94a3b8;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      background: white;
+      padding: 0 0.25rem;
+      font-size: 1rem;
+    }
+
+    .dark .input-label {
+      background: #1e293b;
+    }
+
+    .input-label.active {
+      top: -0.5rem;
+      font-size: 0.7rem;
+      color: #4f46e5;
+    }
+
+    /* زر تسجيل الدخول */
+    .btn-login {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-login:disabled {
       opacity: 0.7;
-      cursor: not-allowed;
       transform: none;
     }
 
-    .toggle-password {
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toggle-password input {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--primaryColor);
-    }
-
-    .toggle-password label {
-      cursor: pointer;
-      font-size: 0.85em;
-      color: var(--textColor);
-      opacity: 0.8;
-    }
-
-    .error {
-      margin-top: 20px;
-      color: #ef4444;
-      font-weight: 500;
-      text-align: center;
-      font-size: 0.9em;
-      padding: 8px;
-      background: rgba(239, 68, 68, 0.1);
-      border-radius: 12px;
-    }
-
-    .darkModeToggle {
+    /* زر تبديل الوضع الداكن */
+    .dark-mode-toggle {
       position: fixed;
       bottom: 20px;
-      left: 20px;
-      background-color: var(--cardBg);
-      color: var(--primaryColor);
-      border: 1px solid var(--borderColor);
-      padding: 12px 14px;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 1.2em;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
-
-    .darkModeToggle:hover {
-      transform: scale(1.05);
-      background-color: var(--primaryColor);
-      color: white;
-    }
-
-    .loading {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      right: 20px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.8s ease-in-out infinite;
-      margin-left: 10px;
-      vertical-align: middle;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      z-index: 100;
     }
 
-    @keyframes spin {
+    .dark .dark-mode-toggle {
+      background: #1e293b;
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    /* تأثير ظهور البطاقة */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
       to {
-        transform: rotate(360deg);
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    /* Animation on scroll classes */
-    .animate-on-scroll {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    .login-card {
+      animation: fadeInUp 0.6s ease-out;
     }
 
-    .animate-on-scroll.animated {
-      opacity: 1;
-      transform: translateY(0);
+    /* أيقونة العين */
+    .toggle-password-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      transition: color 0.3s ease;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .animate-on-scroll {
-        transition: none;
-        opacity: 1;
-        transform: none;
+    .toggle-password-btn:hover {
+      color: #4f46e5;
+    }
+
+    /* رسالة الخطأ */
+    .error-message {
+      background: #fee2e2;
+      border-right: 4px solid #dc2626;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .dark .error-message {
+      background: rgba(220, 38, 38, 0.2);
+    }
+
+    .error-message.show {
+      display: block;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* تحميل */
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* تأثيرات جزيئات */
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      50% { opacity: 0.5; }
+    }
+
+    /* تحسين التجاوب */
+    @media (max-width: 640px) {
+      .login-card {
+        margin: 1rem;
+        padding: 1.5rem !important;
       }
     }
   </style>
 </head>
 
-<body>
-  <div class="box animate-on-scroll">
-    <form id="loginForm" class="form" autocomplete="off">
-      <h2>🔐 تسجيل الدخول</h2>
-      
-      <div class="inputBox">
-        <input type="text" id="username" name="username" required autocomplete="off" />
-        <label for="username">اسم المستخدم</label>
+<body class="flex items-center justify-center p-4">
+
+  <!-- جزيئات خلفية -->
+  <div id="particles"></div>
+
+  <!-- بطاقة تسجيل الدخول -->
+  <div class="login-card w-full max-w-md p-8">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl mb-4">
+        <i class="fas fa-hand-sparkles text-3xl text-indigo-600 dark:text-indigo-400"></i>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">مرحباً بعودتك</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2">تسجيل دخول لوحة التحكم</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="text" id="username" name="username" class="w-full" required autocomplete="off" />
+        <i class="fas fa-user"></i>
+        <label id="usernameLabel" class="input-label">اسم المستخدم</label>
       </div>
 
-      <div class="inputBox">
-        <input type="password" id="password" name="password" required autocomplete="off" />
-        <label for="password">كلمة المرور</label>
+      <div class="input-group">
+        <input type="password" id="password" name="password" class="w-full" required />
+        <i class="fas fa-lock"></i>
+        <button type="button" id="togglePassword" class="toggle-password-btn">
+          <i class="fas fa-eye-slash"></i>
+        </button>
+        <label id="passwordLabel" class="input-label">كلمة المرور</label>
       </div>
 
-      <div class="toggle-password">
-        <input type="checkbox" id="showPassword">
-        <label for="showPassword">إظهار كلمة المرور</label>
-      </div>
+      <button type="submit" id="submitBtn" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>تسجيل الدخول</span>
+      </button>
 
-      <div class="button">
-        <button type="submit" id="submitBtn">دخول</button>
-      </div>
-      
-      <div class="error" id="errorMsg"></div>
+      <div id="errorMsg" class="error-message"></div>
     </form>
+
+    <div class="text-center mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        <i class="fas fa-shield-alt ml-1"></i>
+        منطقة آمنة - جميع البيانات مشفرة
+      </p>
+    </div>
   </div>
 
-  <button id="darkModeToggle" class="darkModeToggle">🌙</button>
+  <button id="darkModeToggle" class="dark-mode-toggle">
+    <i id="darkModeIcon" class="fas fa-moon text-xl"></i>
+  </button>
 
   <script>
-    // ==================== ANIMATION ON SCROLL ====================
-    const animateElements = document.querySelectorAll('.animate-on-scroll');
+    // ==================== جزيئات خلفية متحركة ====================
+    function createParticles() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const size = Math.random() * 6 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 10 + 's';
+        particle.style.animationDuration = (Math.random() * 8 + 4) + 's';
+        container.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // ==================== تأثير الإدخالات ====================
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const usernameLabel = document.getElementById('usernameLabel');
+    const passwordLabel = document.getElementById('passwordLabel');
+
+    function handleInputFocus(input, label) {
+      if (label) {
+        label.classList.add('active');
+      }
+    }
+
+    function handleInputBlur(input, label) {
+      if (label && !input.value) {
+        label.classList.remove('active');
+      }
+    }
+
+    if (usernameInput && usernameLabel) {
+      usernameInput.addEventListener('focus', () => handleInputFocus(usernameInput, usernameLabel));
+      usernameInput.addEventListener('blur', () => handleInputBlur(usernameInput, usernameLabel));
+      if (usernameInput.value) usernameLabel.classList.add('active');
+    }
+
+    if (passwordInput && passwordLabel) {
+      passwordInput.addEventListener('focus', () => handleInputFocus(passwordInput, passwordLabel));
+      passwordInput.addEventListener('blur', () => handleInputBlur(passwordInput, passwordLabel));
+      if (passwordInput.value) passwordLabel.classList.add('active');
+    }
+
+    // ==================== إظهار/إخفاء كلمة المرور ====================
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    if (togglePasswordBtn) {
+      const toggleIcon = togglePasswordBtn.querySelector('i');
+      togglePasswordBtn.addEventListener('click', () => {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        toggleIcon.classList.toggle('fa-eye');
+        toggleIcon.classList.toggle('fa-eye-slash');
+      });
+    }
+
+    // ==================== الوضع الداكن ====================
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
     
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -20px 0px'
-    };
+    if (localStorage.getItem('adminDarkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+      if (darkModeIcon) {
+        darkModeIcon.classList.remove('fa-moon');
+        darkModeIcon.classList.add('fa-sun');
+      }
+    }
     
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animated');
-          observer.unobserve(entry.target);
+    if (darkModeToggle) {
+      darkModeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('adminDarkMode', isDark);
+        
+        if (darkModeIcon) {
+          if (isDark) {
+            darkModeIcon.classList.remove('fa-moon');
+            darkModeIcon.classList.add('fa-sun');
+          } else {
+            darkModeIcon.classList.remove('fa-sun');
+            darkModeIcon.classList.add('fa-moon');
+          }
         }
       });
-    }, observerOptions);
-    
-    animateElements.forEach(element => {
-      observer.observe(element);
-    });
-    
-    // ==================== CHECK EXISTING TOKEN ====================
-    if (localStorage.getItem('token')) {
-      // التحقق من صحة التوكن قبل التوجيه
+    }
+
+    // ==================== التحقق من التوكن المسبق ====================
+    const adminToken = localStorage.getItem('adminToken');
+    if (adminToken) {
       fetch('/api/admin/verify-token', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        headers: { 'Authorization': `Bearer ${adminToken}` }
       }).then(res => {
         if (res.ok) {
           window.location.href = '/dashboard';
         } else {
-          localStorage.removeItem('token');
+          localStorage.removeItem('adminToken');
         }
       }).catch(() => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('adminToken');
+      });
+    }
+
+    // ==================== معالجة تسجيل الدخول ====================
+    const loginForm = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsgDiv = document.getElementById('errorMsg');
+
+    function showError(message) {
+      if (errorMsgDiv) {
+        errorMsgDiv.textContent = message;
+        errorMsgDiv.classList.add('show');
+      }
+    }
+    
+    function hideError() {
+      if (errorMsgDiv) {
+        errorMsgDiv.classList.remove('show');
+        errorMsgDiv.textContent = '';
+      }
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!username || !password) {
+          showError('يرجى إدخال اسم المستخدم وكلمة المرور');
+          return;
+        }
+        
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          const originalHTML = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<div class="loading-spinner"></div><span>جاري التسجيل...</span>';
+        }
+        hideError();
+        
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+          });
+          
+          const result = await res.json();
+          
+          if (res.ok && result.token) {
+            localStorage.setItem('adminToken', result.token);
+            
+            const verifyRes = await fetch('/api/admin/verify-token', {
+              headers: { 'Authorization': `Bearer ${result.token}` }
+            });
+            
+            if (verifyRes.ok) {
+              if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i><span>تم بنجاح...</span>';
+              }
+              setTimeout(() => {
+                window.location.href = '/dashboard';
+              }, 500);
+            } else {
+              showError('فشل التحقق من الصلاحية');
+              localStorage.removeItem('adminToken');
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>تسجيل الدخول</span>';
+              }
+            }
+          } else {
+            showError(result.error || 'اسم المستخدم أو كلمة المرور غير صحيحة');
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>تسجيل الدخول</span>';
+            }
+            
+            const card = document.querySelector('.login-card');
+            if (card) {
+              card.style.animation = 'none';
+              setTimeout(() => {
+                card.style.animation = 'shake 0.3s ease';
+                setTimeout(() => {
+                  card.style.animation = 'fadeInUp 0.6s ease-out';
+                }, 300);
+              }, 10);
+            }
+          }
+        } catch (err) {
+          console.error('Login error:', err);
+          showError('تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>تسجيل الدخول</span>';
+          }
+        }
       });
     }
     
-    // ==================== DARK MODE ====================
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    
-    // تطبيق الوضع المحفوظ
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
-      darkModeToggle.textContent = '☀️';
-    }
-    
-    darkModeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      darkModeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('darkMode', isDark);
-    });
-    
-    // ==================== SHOW/HIDE PASSWORD ====================
-    const showPasswordCheckbox = document.getElementById('showPassword');
-    const passwordInput = document.getElementById('password');
-    
-    showPasswordCheckbox.addEventListener('change', function() {
-      passwordInput.type = this.checked ? 'text' : 'password';
-    });
-    
-    // ==================== LOGIN FORM HANDLER ====================
-    const loginForm = document.getElementById('loginForm');
-    const errorMsg = document.getElementById('errorMsg');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      // تعطيل الزر وإظهار حالة التحميل
-      submitBtn.disabled = true;
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = 'جاري التسجيل <span class="loading"></span>';
-      errorMsg.textContent = '';
-      
-      const data = {
-        username: document.getElementById('username').value.trim(),
-        password: document.getElementById('password').value.trim()
-      };
-      
-      // التحقق من إدخال البيانات
-      if (!data.username || !data.password) {
-        errorMsg.textContent = '❌ يرجى إدخال اسم المستخدم وكلمة المرور';
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-        return;
-      }
-      
-      try {
-        const res = await fetch('/api/admin/login', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-        
-        const result = await res.json();
-        
-        if (res.ok && result.token) {
-          // حفظ التوكن
-          localStorage.setItem('token', result.token);
-          
-          // التحقق من صحة التوكن قبل التوجيه
-          const authCheck = await fetch('/api/admin/verify-token', {
-            headers: {
-              'Authorization': `Bearer ${result.token}`
-            }
-          });
-          
-          if (authCheck.ok) {
-            // إضافة تأثير بسيط قبل التوجيه
-            document.querySelector('.box').style.transform = 'scale(0.95)';
-            setTimeout(() => {
-              window.location.href = '/dashboard';
-            }, 200);
-          } else {
-            errorMsg.textContent = '❌ فشل التحقق من الصلاحية';
-            localStorage.removeItem('token');
-          }
-        } else {
-          errorMsg.textContent = result.error || '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
-        }
-      } catch (err) {
-        console.error('Login error:', err);
-        errorMsg.textContent = '⚠️ تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-      }
-    });
-    
-    // ==================== ADDITIONAL SECURITY ====================
-    // منع النقر بزر الماوس الأيمن على الصفحة
-    document.addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-    });
-    
-    // منع بعض مفاتيح المطورين
-    document.addEventListener("keydown", function(e) {
-      if (e.keyCode === 123 || 
-          (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
-          (e.ctrlKey && e.keyCode === 85)) {
+    // ==================== منع النقر بزر اليمين وحماية بسيطة ====================
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) {
         e.preventDefault();
-        return false;
       }
     });
   </script>
 </body>
+
 </html>
