@@ -1,1306 +1,723 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCore | رعاية صحية متطورة</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #F8FAFC;
-            overflow-x: hidden;
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #E2E8F0;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #2563EB, #06B6D4);
-            border-radius: 10px;
-        }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .glass-dark {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Magnetic Button */
-        .magnetic {
-            transition: transform 0.2s ease;
-        }
-        
-        /* Floating Animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .floating-delayed {
-            animation: float 6s ease-in-out infinite 2s;
-        }
-        
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #2563EB, #06B6D4, #14B8A6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        /* Premium Card Hover */
-        .premium-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .premium-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-        }
-        
-        /* 3D Tilt Effect */
-        .tilt-card {
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
-        }
-        
-        /* Neon Glow */
-        .glow {
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
-        }
-        
-        /* Animated Border */
-        .animated-border {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .animated-border::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #2563EB, #06B6D4, #14B8A6, #2563EB);
-            background-size: 400%;
-            z-index: -1;
-            animation: borderGlow 3s ease infinite;
-            border-radius: inherit;
-        }
-        
-        @keyframes borderGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        /* Custom cursor */
-        .custom-cursor {
-            width: 20px;
-            height: 20px;
-            background: rgba(37, 99, 235, 0.3);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-        }
-        
-        .custom-cursor::before {
-            content: '';
-            width: 40px;
-            height: 40px;
-            border: 2px solid #2563EB;
-            border-radius: 50%;
-            position: absolute;
-            top: -12px;
-            left: -12px;
-            animation: pulse 2s ease infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.3); opacity: 0.2; }
-        }
-        
-        /* Page Transition */
-        .page-transition {
-            animation: pageFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        @keyframes pageFade {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Statistics Counter */
-        .counter {
-            font-variant-numeric: tabular-nums;
-        }
-        
-        /* Bento Grid */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-        
-        @media (min-width: 1024px) {
-            .bento-grid {
-                grid-template-areas: 
-                    "card1 card2 card3"
-                    "card4 card5 card6";
-            }
-        }
-    </style>
-</head>
-<body>
-
-<!-- Custom Cursor -->
-<div class="custom-cursor"></div>
-
-<!-- 3D Background Canvas -->
-<canvas id="bg-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>
-
-<!-- Navbar -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-6" style="background: transparent;">
-    <div class="container mx-auto px-6">
-        <div class="flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center gap-2">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center shadow-lg">
-                    <i class="fas fa-heartbeat text-white text-2xl"></i>
-                </div>
-                <span class="text-2xl font-bold text-[#0F172A]">Medi<span class="gradient-text">Core</span></span>
-            </div>
-            
-            <!-- Navigation Links -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#home" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors relative">الرئيسية</a>
-                <a href="#about" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">عن المركز</a>
-                <a href="#services" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">الخدمات</a>
-                <a href="#location" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">الموقع</a>
-                <a href="#booking" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">الحجز</a>
-                <a href="#results" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">النتائج</a>
-                <a href="#contact" class="nav-link text-[#0F172A] font-medium hover:text-[#2563EB] transition-colors">اتصل بنا</a>
-            </div>
-            
-            <!-- Actions -->
-            <div class="flex items-center gap-4">
-                <button id="darkModeToggle" class="w-10 h-10 rounded-full glass flex items-center justify-center text-[#0F172A]">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="/login.html" class="px-6 py-3 rounded-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
-                    احجز الآن
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<main class="page-transition">
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen relative overflow-hidden pt-32 pb-20">
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Content -->
-                <div>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
-                        <span class="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse"></span>
-                        <span class="text-sm font-medium text-[#0F172A]">الرعاية الصحية المتقدمة لعام 2026</span>
-                    </div>
-                    
-                    <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-6">
-                        رعاية صحية
-                        <span class="gradient-text">ذكية</span>
-                        <br>لمستقبل أفضل
-                    </h1>
-                    
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-                        نقدم أحدث التقنيات الطبية مع فريق من أفضل الأطباء المتخصصين لضمان حصولك على أفضل رعاية صحية ممكنة.
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-4 mb-12">
-                        <a href="#booking" class="px-8 py-4 rounded-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white font-semibold shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 magnetic">
-                            احجز موعدك الآن
-                        </a>
-                        <a href="#services" class="px-8 py-4 rounded-full glass text-[#0F172A] font-semibold hover:bg-white/30 transition-all magnetic">
-                            استكشف خدماتنا
-                        </a>
-                    </div>
-                    
-                    <!-- Statistics -->
-                    <div class="grid grid-cols-4 gap-6">
-                        <div>
-                            <div class="text-3xl font-bold gradient-text counter" data-target="2000">0</div>
-                            <div class="text-sm text-gray-500 mt-1">عملاء سعداء</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold gradient-text counter" data-target="5000">0</div>
-                            <div class="text-sm text-gray-500 mt-1">عمليات ناجحة</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold gradient-text counter" data-target="10">0</div>
-                            <div class="text-sm text-gray-500 mt-1">سنوات خبرة</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold gradient-text counter" data-target="98">0</div>
-                            <div class="text-sm text-gray-500 mt-1">رضا العملاء</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Right Illustration -->
-                <div class="relative">
-                    <div class="floating">
-                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=600&fit=crop" alt="Hero" class="rounded-3xl shadow-2xl w-full h-auto">
-                    </div>
-                    
-                    <!-- Floating Cards -->
-                    <div class="absolute top-10 -left-10 glass rounded-2xl p-4 shadow-xl floating-delayed">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                                <i class="fas fa-stethoscope text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-[#0F172A]">+50 طبيب</div>
-                                <div class="text-xs text-gray-500">متخصص معتمد</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute bottom-20 -right-10 glass rounded-2xl p-4 shadow-xl floating">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center">
-                                <i class="fas fa-clock text-white"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-[#0F172A]">24/7 دعم</div>
-                                <div class="text-xs text-gray-500">خدمة طوارئ</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Animated Background Shapes -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-[#2563EB] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-[#06B6D4] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse delay-1000"></div>
-        </div>
-    </section>
-    
-    <!-- About Section -->
-    <section id="about" class="py-24 relative">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-sm uppercase tracking-wider text-[#2563EB] font-semibold">من نحن</span>
-                <h2 class="text-4xl lg:text-5xl font-bold mt-4 mb-6">رعاية صحية <span class="gradient-text">متكاملة</span> بمعايير عالمية</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">نقدم خدمات طبية متطورة بتقنيات حديثة وفريق طبي على أعلى مستوى من الكفاءة</p>
-            </div>
-            
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Image Composition -->
-                <div class="relative">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-4">
-                            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=300&h=400&fit=crop" class="rounded-2xl shadow-xl w-full h-auto floating">
-                            <img src="https://images.unsplash.com/photo-1530026405186-ed1f139613f6?w=300&h=250&fit=crop" class="rounded-2xl shadow-xl w-full h-auto floating-delayed">
-                        </div>
-                        <div class="space-y-4 mt-8">
-                            <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=300&h=250&fit=crop" class="rounded-2xl shadow-xl w-full h-auto floating-delayed">
-                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=300&h=400&fit=crop" class="rounded-2xl shadow-xl w-full h-auto floating">
-                        </div>
-                    </div>
-                    
-                    <!-- Experience Badge -->
-                    <div class="absolute -bottom-6 -right-6 glass rounded-2xl p-6 shadow-2xl">
-                        <div class="text-center">
-                            <div class="text-4xl font-bold gradient-text">10+</div>
-                            <div class="text-sm text-gray-500">سنوات من التميز</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Content -->
-                <div>
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-microscope text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold mb-2">أحدث التقنيات الطبية</h3>
-                                <p class="text-gray-600">نستخدم أحدث الأجهزة والتقنيات الطبية لتقديم تشخيص دقيق وعلاج فعال</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-user-md text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold mb-2">أفضل الكوادر الطبية</h3>
-                                <p class="text-gray-600">أطباء واستشاريون ذوو خبرة عالية في مختلف التخصصات الطبية</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#14B8A6] to-[#2563EB] flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-calendar-check text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold mb-2">حجز مرن وسريع</h3>
-                                <p class="text-gray-600">نظام حجز إلكتروني متطور يوفر عليك الوقت والجهد</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Timeline -->
-                    <div class="mt-12 pt-8 border-t border-gray-200">
-                        <div class="flex justify-between">
-                            <div class="text-center">
-                                <div class="w-12 h-12 rounded-full bg-[#2563EB] text-white flex items-center justify-center mx-auto mb-2">1</div>
-                                <div class="text-sm font-semibold">تأسيس المركز</div>
-                                <div class="text-xs text-gray-500">2014</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-12 h-12 rounded-full bg-[#06B6D4] text-white flex items-center justify-center mx-auto mb-2">2</div>
-                                <div class="text-sm font-semibold">الاعتماد الدولي</div>
-                                <div class="text-xs text-gray-500">2018</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-12 h-12 rounded-full bg-[#14B8A6] text-white flex items-center justify-center mx-auto mb-2">3</div>
-                                <div class="text-sm font-semibold">قفزة تقنية</div>
-                                <div class="text-xs text-gray-500">2022</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Services Section - Bento Grid -->
-    <section id="services" class="py-24 bg-gradient-to-b from-[#F8FAFC] to-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-sm uppercase tracking-wider text-[#2563EB] font-semibold">خدماتنا</span>
-                <h2 class="text-4xl lg:text-5xl font-bold mt-4">خدمات طبية <span class="gradient-text">شاملة ومتكاملة</span></h2>
-            </div>
-            
-            <div class="bento-grid">
-                <!-- Card 1 -->
-                <div class="premium-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all group" style="grid-area: card1;">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-heartbeat text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">طب القلب</h3>
-                    <p class="text-gray-600 leading-relaxed">تشخيص وعلاج أمراض القلب باستخدام أحدث التقنيات وأفضل الكوادر الطبية</p>
-                </div>
-                
-                <!-- Card 2 -->
-                <div class="premium-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all" style="grid-area: card2;">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-brain text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">طب الأعصاب</h3>
-                    <p class="text-gray-600 leading-relaxed">علاج متقدم لأمراض الجهاز العصبي بتقنيات حديثة</p>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="premium-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all" style="grid-area: card3;">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#14B8A6] to-[#2563EB] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-bone text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">طب العظام</h3>
-                    <p class="text-gray-600 leading-relaxed">عمليات العظام والمفاصل باستخدام أحدث التقنيات الجراحية</p>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="premium-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all lg:col-span-2" style="grid-area: card4;">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center mb-6">
-                                <i class="fas fa-lungs text-white text-2xl"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-3">طب الجهاز التنفسي</h3>
-                            <p class="text-gray-600 leading-relaxed">تشخيص وعلاج أمراض الجهاز التنفسي باستخدام أحدث الأجهزة</p>
-                        </div>
-                        <div class="text-4xl font-bold gradient-text">+2000</div>
-                    </div>
-                </div>
-                
-                <!-- Card 5 -->
-                <div class="premium-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all" style="grid-area: card5;">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center mb-6">
-                        <i class="fas fa-child text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">طب الأطفال</h3>
-                    <p class="text-gray-600 leading-relaxed">رعاية متكاملة للأطفال من الولادة حتى المراهقة</p>
-                </div>
-                
-                <!-- Card 6 -->
-                <div class="premium-card bg-gradient-to-br from-[#2563EB] to-[#06B6D4] rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all text-white" style="grid-area: card6;">
-                    <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6 backdrop-blur">
-                        <i class="fas fa-stethoscope text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">استشارات عن بعد</h3>
-                    <p class="text-white/90 leading-relaxed">خدمات استشارية عبر الإنترنت من نخبة الأطباء</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Location Section -->
-    <section id="location" class="py-24">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-sm uppercase tracking-wider text-[#2563EB] font-semibold">موقعنا</span>
-                <h2 class="text-4xl lg:text-5xl font-bold mt-4">سهولة <span class="gradient-text">الوصول</span> إلينا</h2>
-            </div>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Google Map -->
-                <div class="rounded-3xl overflow-hidden shadow-2xl h-[400px]">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1x3454.0!2d31.2357!3d30.0444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145840f9f9f9f9f9%3A0x9f9f9f9f9f9f9f9f!2z2YXYsdmK2K8!5e0!3m2!1sar!2seg!4v1700000000000!5m2!1sar!2seg" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy">
-                    </iframe>
-                </div>
-                
-                <!-- Contact Info & Working Hours -->
-                <div class="space-y-6">
-                    <div class="glass rounded-3xl p-8">
-                        <h3 class="text-2xl font-bold mb-6">معلومات الاتصال</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                                    <i class="fas fa-map-marker-alt text-white"></i>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">العنوان</div>
-                                    <div class="text-gray-600">القاهرة، مصر - المنطقة الطبية</div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center">
-                                    <i class="fas fa-phone text-white"></i>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">الهاتف</div>
-                                    <div class="text-gray-600">+20 123 456 7890</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass rounded-3xl p-8">
-                        <h3 class="text-2xl font-bold mb-6">ساعات العمل</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span>السبت - الأربعاء</span>
-                                <span class="font-semibold">9:00 - 21:00</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>الخميس</span>
-                                <span class="font-semibold">9:00 - 14:00</span>
-                            </div>
-                            <div class="flex justify-between items-center text-[#2563EB] font-bold">
-                                <span>الجمعة</span>
-                                <span>عطلة</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Quick Actions -->
-                    <div class="grid grid-cols-3 gap-4">
-                        <a href="https://wa.me/201234567890" class="glass rounded-2xl p-4 text-center hover:shadow-xl transition-all group">
-                            <i class="fab fa-whatsapp text-2xl text-green-500 group-hover:scale-110 transition-transform inline-block"></i>
-                            <div class="text-sm mt-2">واتساب</div>
-                        </a>
-                        <a href="tel:+201234567890" class="glass rounded-2xl p-4 text-center hover:shadow-xl transition-all group">
-                            <i class="fas fa-phone-alt text-2xl text-[#2563EB] group-hover:scale-110 transition-transform inline-block"></i>
-                            <div class="text-sm mt-2">اتصال</div>
-                        </a>
-                        <a href="#" class="glass rounded-2xl p-4 text-center hover:shadow-xl transition-all group">
-                            <i class="fas fa-directions text-2xl text-[#14B8A6] group-hover:scale-110 transition-transform inline-block"></i>
-                            <div class="text-sm mt-2">خرائط</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Booking Section -->
-    <section id="booking" class="py-24 bg-gradient-to-b from-white to-[#F8FAFC]">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-sm uppercase tracking-wider text-[#2563EB] font-semibold">احجز موعدك</span>
-                <h2 class="text-4xl lg:text-5xl font-bold mt-4">اختر الوقت المناسب <span class="gradient-text">لك</span></h2>
-            </div>
-            
-            <div class="max-w-2xl mx-auto">
-                <div class="glass rounded-3xl p-8 shadow-2xl">
-                    <!-- Progress Steps -->
-                    <div class="flex justify-between mb-8">
-                        <div class="flex-1 text-center relative">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white flex items-center justify-center mx-auto mb-2 relative z-10">1</div>
-                            <div class="text-sm font-semibold">المعلومات</div>
-                            <div class="absolute top-5 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
-                        </div>
-                        <div class="flex-1 text-center relative">
-                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mx-auto mb-2">2</div>
-                            <div class="text-sm font-semibold text-gray-500">التاريخ</div>
-                            <div class="absolute top-5 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
-                        </div>
-                        <div class="flex-1 text-center">
-                            <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center mx-auto mb-2">3</div>
-                            <div class="text-sm font-semibold text-gray-500">التأكيد</div>
-                        </div>
-                    </div>
-                    
-                    <form id="bookingForm" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">الاسم الكامل</label>
-                            <input type="text" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">رقم الهاتف</label>
-                            <input type="tel" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">اختيار الخدمة</label>
-                            <select required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                                <option value="">اختر الخدمة</option>
-                                <option>طب القلب</option>
-                                <option>طب الأعصاب</option>
-                                <option>طب العظام</option>
-                                <option>طب الأطفال</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
-                            متابعة الحجز
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Results Section -->
-    <section id="results" class="py-24">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-sm uppercase tracking-wider text-[#2563EB] font-semibold">نتائجنا</span>
-                <h2 class="text-4xl lg:text-5xl font-bold mt-4">قصص نجاح <span class="gradient-text">ملهمة</span></h2>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass rounded-3xl p-8 hover:shadow-2xl transition-all">
-                    <div class="flex items-start gap-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">أحمد محمد</h3>
-                            <p class="text-gray-600 mb-3">عملية ناجحة في القلب المفتوح</p>
-                            <div class="flex items-center gap-2 text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-3xl p-8 hover:shadow-2xl transition-all">
-                    <div class="flex items-start gap-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user text-white text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-2">سارة خالد</h3>
-                            <p class="text-gray-600 mb-3">علاج طبيعي متقدم نتائج مذهلة</p>
-                            <div class="flex items-center gap-2 text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-gradient-to-b from-[#F8FAFC] to-white">
-        <div class="container mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-12">
-                <!-- Contact Form -->
-                <div class="glass rounded-3xl p-8 shadow-2xl">
-                    <h3 class="text-2xl font-bold mb-6">أرسل لنا رسالة</h3>
-                    <form class="space-y-6">
-                        <div>
-                            <input type="text" placeholder="الاسم الكامل" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <input type="email" placeholder="البريد الإلكتروني" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <textarea rows="4" placeholder="رسالتك" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all"></textarea>
-                        </div>
-                        <button class="w-full py-4 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
-                            إرسال الرسالة
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Contact Info -->
-                <div class="space-y-6">
-                    <div class="glass rounded-3xl p-8">
-                        <h3 class="text-2xl font-bold mb-6">معلومات التواصل</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-4">
-                                <i class="fas fa-phone-alt text-2xl text-[#2563EB]"></i>
-                                <div>+20 123 456 7890</div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <i class="fas fa-envelope text-2xl text-[#06B6D4]"></i>
-                                <div>info@medicore.com</div>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <i class="fab fa-whatsapp text-2xl text-green-500"></i>
-                                <div>+20 123 456 7890</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="glass rounded-3xl p-8">
-                        <h3 class="text-2xl font-bold mb-6">تابعنا</h3>
-                        <div class="flex gap-4">
-                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center text-white hover:scale-110 transition-transform">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center text-white hover:scale-110 transition-transform">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="w-12 h-12 rounded-full bg-gradient-to-br from-[#14B8A6] to-[#2563EB] flex items-center justify-center text-white hover:scale-110 transition-transform">
-                                <i class="fab fa-x-twitter"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="bg-[#0F172A] text-white py-16">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8 mb-12">
-                <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
-                        <span class="text-xl font-bold">MediCore</span>
-                    </div>
-                    <p class="text-gray-400">رعاية صحية متطورة بمعايير عالمية</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">روابط سريعة</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#home" class="hover:text-white transition-colors">الرئيسية</a></li>
-                        <li><a href="#services" class="hover:text-white transition-colors">الخدمات</a></li>
-                        <li><a href="#about" class="hover:text-white transition-colors">عن المركز</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">الخدمات</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>طب القلب</li>
-                        <li>طب الأعصاب</li>
-                        <li>طب العظام</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">النشرة البريدية</h4>
-                    <div class="flex">
-                        <input type="email" placeholder="بريدك الإلكتروني" class="flex-1 px-4 py-2 rounded-r-xl bg-gray-800 border border-gray-700 focus:outline-none">
-                        <button class="px-6 py-2 bg-gradient-to-r from-[#2563EB] to-[#06B6D4] rounded-l-xl">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 MediCore. جميع الحقوق محفوظة</p>
-            </div>
-        </div>
-    </footer>
-</main>
-
-<script>
-    // Custom Cursor
-    const cursor = document.querySelector('.custom-cursor');
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
-    });
-    
-    // Dark Mode Toggle
-    let isDark = false;
-    document.getElementById('darkModeToggle').addEventListener('click', () => {
-        isDark = !isDark;
-        if(isDark) {
-            document.body.style.background = '#0F172A';
-            document.querySelectorAll('.text-[#0F172A]').forEach(el => el.classList.replace('text-[#0F172A]', 'text-white'));
-            document.querySelectorAll('.glass').forEach(el => el.classList.add('glass-dark'));
-        } else {
-            document.body.style.background = '#F8FAFC';
-            document.querySelectorAll('.text-white').forEach(el => el.classList.replace('text-white', 'text-[#0F172A]'));
-            document.querySelectorAll('.glass-dark').forEach(el => el.classList.remove('glass-dark'));
-        }
-    });
-    
-    // Scroll Navbar Effect
-    window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        if(window.scrollY > 50) {
-            navbar.classList.add('glass', 'shadow-xl');
-            navbar.classList.remove('bg-transparent');
-        } else {
-            navbar.classList.remove('glass', 'shadow-xl');
-            navbar.classList.add('bg-transparent');
-        }
-    });
-    
-    // Counter Animation
-    const counters = document.querySelectorAll('.counter');
-    const animateCounter = (counter) => {
-        const target = parseInt(counter.dataset.target);
-        let current = 0;
-        const increment = target / 50;
-        const updateCounter = () => {
-            if(current < target) {
-                current += increment;
-                counter.textContent = Math.ceil(current);
-                setTimeout(updateCounter, 20);
-            } else {
-                counter.textContent = target;
-            }
-        };
-        updateCounter();
-    };
-    
-    // Trigger counters on view
-    const observerOptions = { threshold: 0.5 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                animateCounter(entry.target);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    counters.forEach(counter => observer.observe(counter));
-    
-    // GSAP Animations
-    gsap.registerPlugin(ScrollTrigger);
-    
-    gsap.from('.premium-card', {
-        scrollTrigger: {
-            trigger: '#services',
-            start: 'top center',
-            toggleActions: 'play none none reverse'
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1
-    });
-    
-    gsap.from('.glass', {
-        scrollTrigger: {
-            trigger: '#location',
-            start: 'top center'
-        },
-        scale: 0.95,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.1
-    });
-    
-    // 3D Background
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    
-    const geometry = new
-    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0x2563EB, transparent: true, opacity: 0.1 });
-    const particles = [];
-    
-    for(let i = 0; i < 50; i++) {
-        const particle = new THREE.Mesh(geometry, material);
-        particle.position.x = (Math.random() - 0.5) * 50;
-        particle.position.y = (Math.random() - 0.5) * 30;
-        particle.position.z = (Math.random() - 0.5) * 30 - 50;
-        scene.add(particle);
-        particles.push(particle);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>بداية | مركز التدخل المبكر والتأهيل</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
     }
-    
-    camera.position.z = 30;
-    
-    function animate3D() {
-        requestAnimationFrame(animate3D);
-        particles.forEach(particle => {
-            particle.rotation.x += 0.01;
-            particle.rotation.y += 0.01;
-        });
-        renderer.render(scene, camera);
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    animate3D();
-    
-    // Magnetic Buttons
-    document.querySelectorAll('.magnetic').forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = 'translate(0, 0) scale(1)';
-        });
-    });
-    
-    // Form Submission
-    document.getElementById('bookingForm')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('تم استلام طلب الحجز بنجاح! سنتواصل معك قريباً');
-        e.target.reset();
-    });
-    
-    // Smooth Scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if(target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-    
-    // Page Transition on load
-    window.addEventListener('load', () => {
-        document.querySelector('main').style.opacity = '1';
-    });
-</script>
 
-<!-- Login Page -->
-<script>
-    // Check if we're on login page
-    if(window.location.pathname.includes('login.html')) {
-        document.body.innerHTML = `
-            <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#E2E8F0]">
-                <div class="glass rounded-3xl p-12 max-w-md w-full shadow-2xl page-transition">
-                    <div class="text-center mb-8">
-                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-heartbeat text-white text-3xl"></i>
-                        </div>
-                        <h2 class="text-3xl font-bold gradient-text">مرحباً بعودتك</h2>
-                        <p class="text-gray-500 mt-2">تسجيل الدخول إلى لوحة التحكم</p>
-                    </div>
-                    
-                    <form id="loginForm" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">اسم المستخدم</label>
-                            <input type="text" id="username" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-2">كلمة المرور</label>
-                            <input type="password" id="password" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563EB] focus:outline-none transition-all">
-                        </div>
-                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#06B6D4] text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
-                            تسجيل الدخول
-                        </button>
-                    </form>
-                    
-                    <div class="mt-6 text-center">
-                        <a href="/" class="text-[#2563EB] hover:underline">← العودة إلى الرئيسية</a>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('loginForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Demo login - in production use proper authentication
-            if(username === 'admin' && password === 'admin123') {
-                localStorage.setItem('isLoggedIn', 'true');
-                window.location.href = '/dashboard.html';
-            } else {
-                alert('بيانات الدخول غير صحيحة');
-            }
-        });
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
     }
-    
-    // Dashboard Page
-    if(window.location.pathname.includes('dashboard.html')) {
-        // Check authentication
-        if(!localStorage.getItem('isLoggedIn')) {
-            window.location.href = '/login.html';
-        }
-        
-        document.body.innerHTML = `
-            <div class="min-h-screen bg-gradient-to-br from-[#F8FAFC] to-[#E2E8F0]">
-                <!-- Dashboard Sidebar -->
-                <div class="fixed right-0 top-0 h-full w-72 glass-dark shadow-2xl z-50">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-8 pb-8 border-b border-gray-700">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                                <i class="fas fa-heartbeat text-white text-2xl"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-xl">MediCore</div>
-                                <div class="text-xs text-gray-400">Admin Dashboard</div>
-                            </div>
-                        </div>
-                        
-                        <nav class="space-y-2">
-                            <a href="#" class="dashboard-nav-item active flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white">
-                                <i class="fas fa-chart-line w-5"></i>
-                                <span>لوحة التحكم</span>
-                            </a>
-                            <a href="#" class="dashboard-nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white transition-all">
-                                <i class="fas fa-calendar-check w-5"></i>
-                                <span>المواعيد</span>
-                                <span class="mr-auto bg-[#2563EB] text-white text-xs px-2 py-1 rounded-full">12</span>
-                            </a>
-                            <a href="#" class="dashboard-nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white transition-all">
-                                <i class="fas fa-users w-5"></i>
-                                <span>المرضى</span>
-                            </a>
-                            <a href="#" class="dashboard-nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white transition-all">
-                                <i class="fas fa-chart-bar w-5"></i>
-                                <span>التقارير</span>
-                            </a>
-                            <a href="#" class="dashboard-nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/10 hover:text-white transition-all">
-                                <i class="fas fa-cog w-5"></i>
-                                <span>الإعدادات</span>
-                            </a>
-                        </nav>
-                        
-                        <div class="absolute bottom-8 left-6 right-6">
-                            <button id="logoutBtn" class="w-full py-3 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-all flex items-center justify-center gap-2">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>تسجيل الخروج</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Dashboard Main Content -->
-                <div class="mr-72 p-8">
-                    <!-- Header -->
-                    <div class="flex justify-between items-center mb-8">
-                        <h1 class="text-3xl font-bold gradient-text">لوحة التحكم</h1>
-                        <div class="flex items-center gap-4">
-                            <button id="darkModeToggleDashboard" class="w-10 h-10 rounded-full glass flex items-center justify-center">
-                                <i class="fas fa-moon"></i>
-                            </button>
-                            <div class="flex items-center gap-3 glass rounded-full px-4 py-2">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                                    <span class="text-white font-bold">أ</span>
-                                </div>
-                                <div>
-                                    <div class="font-semibold text-sm">Admin User</div>
-                                    <div class="text-xs text-gray-500">مدير النظام</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div class="glass rounded-2xl p-6 hover:shadow-2xl transition-all">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-gray-500 text-sm">إجمالي المرضى</p>
-                                    <p class="text-3xl font-bold mt-2">2,847</p>
-                                    <p class="text-green-500 text-sm mt-2">↑ +12% عن الشهر الماضي</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#06B6D4] flex items-center justify-center">
-                                    <i class="fas fa-users text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-2xl p-6 hover:shadow-2xl transition-all">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-gray-500 text-sm">المواعيد اليوم</p>
-                                    <p class="text-3xl font-bold mt-2">24</p>
-                                    <p class="text-blue-500 text-sm mt-2">8 مواعيد متبقية</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#06B6D4] to-[#14B8A6] flex items-center justify-center">
-                                    <i class="fas fa-calendar-alt text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-2xl p-6 hover:shadow-2xl transition-all">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-gray-500 text-sm">العمليات الناجحة</p>
-                                    <p class="text-3xl font-bold mt-2">98.5%</p>
-                                    <p class="text-green-500 text-sm mt-2">↑ +2.3%</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#14B8A6] to-[#2563EB] flex items-center justify-center">
-                                    <i class="fas fa-chart-line text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="glass rounded-2xl p-6 hover:shadow-2xl transition-all">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="text-gray-500 text-sm">تقييم المرضى</p>
-                                    <p class="text-3xl font-bold mt-2">4.9</p>
-                                    <p class="text-yellow-500 text-sm mt-2">★★★★★</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#14B8A6] flex items-center justify-center">
-                                    <i class="fas fa-star text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Charts Section -->
-                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
-                        <div class="glass rounded-2xl p-6">
-                            <h3 class="text-xl font-bold mb-4">المواعيد خلال الأسبوع</h3>
-                            <canvas id="appointmentsChart" height="200"></canvas>
-                        </div>
-                        
-                        <div class="glass rounded-2xl p-6">
-                            <h3 className="text-xl font-bold mb-4">توزيع الخدمات</h3>
-                            <canvas id="servicesChart" height="200"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Appointments -->
-                    <div class="glass rounded-2xl p-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-xl font-bold">أحدث المواعيد</h3>
-                            <button class="text-[#2563EB] text-sm hover:underline">عرض الكل</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="border-b border-gray-200">
-                                    <tr class="text-right">
-                                        <th class="pb-3 font-semibold text-gray-600">المريض</th>
-                                        <th class="pb-3 font-semibold text-gray-600">الخدمة</th>
-                                        <th class="pb-3 font-semibold text-gray-600">التاريخ</th>
-                                        <th class="pb-3 font-semibold text-gray-600">الحالة</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b border-gray-100">
-                                        <td class="py-3">أحمد محمد</td>
-                                        <td>طب القلب</td>
-                                        <td>2024-01-15</td>
-                                        <td><span class="px-2 py-1 rounded-full bg-green-100 text-green-600 text-xs">مؤكد</span></td>
-                                    </tr>
-                                    <tr class="border-b border-gray-100">
-                                        <td class="py-3">سارة خالد</td>
-                                        <td>طب الأعصاب</td>
-                                        <td>2024-01-16</td>
-                                        <td><span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-600 text-xs">قيد الانتظار</span></td>
-                                    </tr>
-                                    <tr class="border-b border-gray-100">
-                                        <td class="py-3">محمد علي</td>
-                                        <td>طب العظام</td>
-                                        <td>2024-01-17</td>
-                                        <td><span class="px-2 py-1 rounded-full bg-blue-100 text-blue-600 text-xs">قيد المراجعة</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Load Charts
-        const loadCharts = () => {
-            const ctx1 = document.getElementById('appointmentsChart')?.getContext('2d');
-            const ctx2 = document.getElementById('servicesChart')?.getContext('2d');
-            
-            if(ctx1 && window.Chart) {
-                new Chart(ctx1, {
-                    type: 'line',
-                    data: {
-                        labels: ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
-                        datasets: [{
-                            label: 'المواعيد',
-                            data: [12, 19, 15, 17, 14, 10, 8],
-                            borderColor: '#2563EB',
-                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true
-                    }
-                });
-                
-                new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['طب القلب', 'طب الأعصاب', 'طب العظام', 'طب الأطفال'],
-                        datasets: [{
-                            data: [35, 25, 25, 15],
-                            backgroundColor: ['#2563EB', '#06B6D4', '#14B8A6', '#8B5CF6']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true
-                    }
-                });
-            }
-        };
-        
-        // Load Chart.js library
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-        script.onload = loadCharts;
-        document.head.appendChild(script);
-        
-        // Logout functionality
-        document.getElementById('logoutBtn')?.addEventListener('click', () => {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = '/login.html';
-        });
-        
-        // Dark mode for dashboard
-        let isDashboardDark = false;
-        document.getElementById('darkModeToggleDashboard')?.addEventListener('click', () => {
-            isDashboardDark = !isDashboardDark;
-            if(isDashboardDark) {
-                document.body.classList.add('dark-mode');
-                document.querySelectorAll('.glass').forEach(el => el.classList.add('glass-dark'));
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.querySelectorAll('.glass-dark').forEach(el => el.classList.remove('glass-dark'));
-            }
-        });
-        
-        // Navigation active state
-        document.querySelectorAll('.dashboard-nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                document.querySelectorAll('.dashboard-nav-item').forEach(nav => nav.classList.remove('active', 'bg-white/10', 'text-white'));
-                item.classList.add('active', 'bg-white/10', 'text-white');
-            });
-        });
-    }
-</script>
 
-<!-- Add Chart.js CDN to head for dashboard -->
-<script>
-    if(!window.location.pathname.includes('dashboard.html')) {
-        // Only add if not already added
+    /* ========== VARIABLES ========== */
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #818cf8;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --gray: #64748b;
     }
-</script>
 
-<style>
-    /* Additional styles for dashboard */
-    .dark-mode {
-        background: #0F172A;
-        color: white;
+    /* ========== CUSTOM SCROLLBAR ========== */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-    
-    .dashboard-nav-item.active {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 10px;
     }
-    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-light);
+    }
+
+    /* ========== NAVIGATION ========== */
+    .nav-link {
+      position: relative;
+      color: #cbd5e1;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      display: block;
+      font-weight: 500;
+    }
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: all 0.3s ease;
+      transform: translateX(50%);
+    }
+    .nav-link:hover::before {
+      width: 80%;
+    }
+    .nav-link:hover {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+    }
+
+    /* ========== THEME TOGGLE ========== */
+    #themeToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #themeToggle:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-menu {
+      display: none;
+    }
     @media (max-width: 768px) {
-        .mr-72 {
-            margin-right: 0;
-        }
-        .fixed.right-0 {
-            transform: translateX(100%);
-        }
+      .desktop-menu {
+        display: none;
+      }
+      .mobile-menu-button {
+        display: block !important;
+      }
+      .mobile-menu.active {
+        display: block;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(12px);
+        width: 100%;
+        padding: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        animation: slideDown 0.3s ease;
+      }
     }
-</style>
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
+    /* ========== ANIMATION ON SCROLL (Lightweight) ========== */
+    .scroll-animate {
+      opacity: 0;
+      transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform, opacity;
+    }
+    .fade-up { transform: translateY(40px); }
+    .fade-right { transform: translateX(-40px); }
+    .fade-left { transform: translateX(40px); }
+    .zoom-in { transform: scale(0.95); }
+    .scroll-animate.animated {
+      opacity: 1;
+      transform: translateX(0) translateY(0) scale(1);
+    }
+
+    /* ========== CARD HOVER ========== */
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ========== GLASS EFFECT ========== */
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .dark .glass {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    /* ========== HERO SECTION ========== */
+    .hero-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ========== REDUCED MOTION ========== */
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-animate {
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* ========== FORM STYLES ========== */
+    input, textarea, select {
+      transition: all 0.3s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      transform: translateY(-2px);
+    }
+
+    /* ========== FLOATING ANIMATION ========== */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* ========== IMAGE HOVER EFFECT ========== */
+    .about-image {
+      transition: all 0.5s ease;
+    }
+    .about-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="bg-gray-900/90 backdrop-blur-md text-white py-4 fixed w-full top-0 left-0 shadow-xl z-50 transition-all duration-300">
+    <div class="container mx-auto flex justify-between items-center px-6">
+      <a href="#home" class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent hover:scale-105 transition-transform">
+        <i class="fas fa-hand-sparkles ml-2 text-indigo-400"></i>بداية
+      </a>
+      
+      <button class="mobile-menu-button p-2 focus:outline-none hidden">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+      
+      <nav class="desktop-menu">
+        <ul class="flex space-x-2">
+        <li><a href="#home" class="nav-link"><i class="fas fa-home ml-2"></i>الرئيسية</a></li>
+        <li><a href="#about" class="nav-link"><i class="fas fa-info-circle ml-2"></i>معلومات عنا</a></li>
+        <li><a href="#services" class="nav-link"><i class="fas fa-chalkboard-user ml-2"></i>خدماتنا</a></li>
+        <li><a href="#contact" class="nav-link"><i class="fas fa-location ml-2"></i>المكان</a></li>
+        <li><a href="#booking" class="nav-link"><i class="fas fa-calendar-check ml-2"></i>الحجز</a></li>
+        <li><a href="#result" class="nav-link"><i class="fas fa-file-alt ml-2"></i>النتائج</a></li>
+        <li><a href="#inquiries" class="nav-link"><i class="fas fa-phone-alt ml-2"></i>اتصل بنا</a></li>
+      </ul>
+      </nav>
+    </div>
+    
+    <div class="mobile-menu">
+      <ul class="px-6 py-3 space-y-2">
+        <li><a href="#home" class="nav-link"><i class="fas fa-home ml-2"></i>الرئيسية</a></li>
+        <li><a href="#about" class="nav-link"><i class="fas fa-info-circle ml-2"></i>معلومات عنا</a></li>
+        <li><a href="#services" class="nav-link"><i class="fas fa-chalkboard-user ml-2"></i>خدماتنا</a></li>
+        li><a href="#contact" class="nav-link"><i class="fas fa-location ml-2"></i>المكان</a></li>
+        <li><a href="#booking" class="nav-link"><i class="fas fa-calendar-check ml-2"></i>الحجز</a></li>
+        <li><a href="#result" class="nav-link"><i class="fas fa-file-alt ml-2"></i>النتائج</a></li>
+        <li><a href="#inquiries" class="nav-link"><i class="fas fa-phone-alt ml-2"></i>اتصل بنا</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <button id="themeToggle" class="px-4 py-2 bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-all">
+    <span id="themeIcon" class="text-xl">🌙</span>
+  </button>
+
+  <div class="pt-20"></div>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero-section min-h-screen flex items-center justify-center bg-fixed bg-cover bg-center" style="background-image: url('https://i.postimg.cc/pT7cQcJy/464077830-122097874184585064-7225992681099549192-n.jpg')">
+    <div class="hero-content text-center text-white px-6">
+      <div class="scroll-animate zoom-in">
+        <div class="inline-block p-4 bg-white/10 rounded-full backdrop-blur-sm mb-6">
+          <i class="fas fa-hand-sparkles text-5xl text-indigo-300"></i>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold mb-4">مركز بداية</h1>
+        <p class="text-xl md:text-2xl mb-6 opacity-90">للتدخل المبكر والتأهيل</p>
+        <p class="text-lg mb-8 max-w-2xl mx-auto">نحن نقدم أفضل خدمات التخاطب، تنمية المهارات، تعديل السلوك، وصعوبات التعلم</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#booking" class="btn-primary px-8 py-3 rounded-full font-semibold inline-flex items-center justify-center gap-2">
+            <i class="fas fa-calendar-alt"></i> احجز موعدك الآن
+          </a>
+          <a href="#about" class="border-2 border-white/50 hover:bg-white/10 px-8 py-3 rounded-full font-semibold inline-flex items-center justify-center gap-2 transition-all">
+            <i class="fas fa-play"></i> تعرف علينا
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section - مع صورة على اليسار -->
+  <section id="about" class="py-24 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="scroll-animate fade-up text-center mb-12">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">من نحن</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">مركز بداية للتدخل المبكر</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- الصورة على اليسار (حسب RTL) -->
+        <div class="scroll-animate fade-left order-1 md:order-2">
+          <div class="relative">
+            <div class="absolute -top-4 -left-4 w-32 h-32 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-3xl"></div>
+            <img src="https://i.postimg.cc/pT7cQcJy/464077830-122097874184585064-7225992681099549192-n.jpg" alt="مركز بداية للتدخل المبكر" class="about-image rounded-2xl shadow-2xl w-full object-cover h-96 relative z-10">
+            <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-2xl"></div>
+          </div>
+        </div>
+        <!-- النص على اليمين -->
+        <div class="scroll-animate fade-right order-2 md:order-1">
+          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+            مركز بداية للتدخل المبكر والتأهيل هو مؤسسة متخصصة تقدم خدمات شاملة للأطفال وأسرهم. نهدف إلى تقديم أفضل الرعاية والتأهيل باستخدام أحدث الأساليب العلمية.
+          </p>
+          <div class="grid grid-cols-2 gap-4 mt-8">
+            <div class="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+              <i class="fas fa-check-circle text-green-500 text-xl"></i>
+              <span>تخاطب وتنمية مهارات</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+              <i class="fas fa-check-circle text-green-500 text-xl"></i>
+              <span>تعديل سلوك</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+              <i class="fas fa-check-circle text-green-500 text-xl"></i>
+              <span>صعوبات تعلم</span>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+              <i class="fas fa-check-circle text-green-500 text-xl"></i>
+              <span>إرشاد نفسي</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-24 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-6">
+      <div class="scroll-animate fade-up text-center mb-12">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">خدماتنا</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">ما نقدمه لكم</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0s">
+          <div class="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-comments text-3xl text-indigo-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">التخاطب</h3>
+          <p class="text-gray-600 dark:text-gray-400">برامج متخصصة لعلاج اضطرابات النطق والكلام وتطوير مهارات التواصل</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0.1s">
+          <div class="w-20 h-20 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-brain text-3xl text-green-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">تنمية المهارات</h3>
+          <p class="text-gray-600 dark:text-gray-400">تنمية المهارات المعرفية والحركية والاجتماعية للأطفال</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0.2s">
+          <div class="w-20 h-20 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-hand-peace text-3xl text-purple-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">تعديل السلوك</h3>
+          <p class="text-gray-600 dark:text-gray-400">برامج تعديل السلوك للأطفال ذوي الاحتياجات الخاصة</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0.3s">
+          <div class="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-book-open text-3xl text-yellow-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">صعوبات التعلم</h3>
+          <p class="text-gray-600 dark:text-gray-400">تشخيص وعلاج صعوبات التعلم الأكاديمية والنمائية</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0.4s">
+          <div class="w-20 h-20 bg-pink-100 dark:bg-pink-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-heart text-3xl text-pink-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">إرشاد نفسي</h3>
+          <p class="text-gray-600 dark:text-gray-400">جلسات إرشاد نفسي للأطفال والأسر لتحسين الصحة النفسية</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg" style="transition-delay: 0.5s">
+          <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-chart-line text-3xl text-blue-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">اختبارات نفسية</h3>
+          <p class="text-gray-600 dark:text-gray-400">تطبيق المقاييس والاختبارات النفسية المتخصصة</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Location -->
+  <section id="contact" class="py-24 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="scroll-animate fade-up text-center mb-12">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">تواصل معنا</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">المكان وطرق التواصل</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="scroll-animate fade-right card-hover bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-8 rounded-2xl shadow-lg text-center">
+          <div class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-map-marker-alt text-2xl text-indigo-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">العنوان</h3>
+          <p class="text-gray-600 dark:text-gray-300">٢٩ شارع سلطان ابو العلا، العروبة، امبابة</p>
+        </div>
+        <div class="scroll-animate fade-up card-hover bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-8 rounded-2xl shadow-lg text-center">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-clock text-2xl text-green-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">مواعيد العمل</h3>
+          <div class="space-y-1 text-gray-600 dark:text-gray-300">
+            <p><i class="fas fa-calendar-week ml-2"></i>السبت: 2 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الاحد: 6 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الاثنين: 6 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الثلاثاء: 6 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الاربعاء: 6 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الخميس: 6 م - 11 م</p>
+            <p><i class="fas fa-calendar-week ml-2"></i>الجمعة: 2 م - 11 م</p>
+          </div>
+        </div>
+        <div class="scroll-animate fade-left card-hover bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-8 rounded-2xl shadow-lg text-center">
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-headset text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">للتواصل</h3>
+          <div class="space-y-3">
+            <a href="https://wa.me/201278127159" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full inline-flex items-center justify-center gap-2 transition-all w-full">
+              <i class="fab fa-whatsapp"></i> واتساب
+            </a>
+            <a href="tel:01278127159" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full inline-flex items-center justify-center gap-2 transition-all w-full">
+              <i class="fas fa-phone-alt"></i> اتصال
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section id="booking" class="py-24 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-6 max-w-lg">
+      <div class="scroll-animate zoom-in text-center mb-8">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">احجز الآن</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2">احجز موعدك</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4"></div>
+      </div>
+      <form id="bookingForm" class="scroll-animate fade-up bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-user ml-2 text-indigo-500"></i>الاسم الكامل</label>
+          <input type="text" id="bName" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-phone ml-2 text-indigo-500"></i>رقم التليفون</label>
+          <input type="tel" id="bPhone" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-calendar ml-2 text-indigo-500"></i>اختر التاريخ</label>
+          <input type="date" id="bDate" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-6">
+          <label class="block mb-2 font-semibold"><i class="fas fa-clock ml-2 text-indigo-500"></i>اختر الوقت</label>
+          <input type="time" id="bTime" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2">
+          <i class="fas fa-check-circle"></i> احجز الآن
+        </button>
+      </form>
+      <p id="bookingResponse" class="mt-4 text-center font-semibold"></p>
+    </div>
+  </section>
+
+  <!-- Result Inquiry -->
+  <section id="result" class="py-24 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-6 max-w-lg">
+      <div class="scroll-animate zoom-in text-center mb-8">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">استعلم عن نتيجتك</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2">النتائج</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4"></div>
+      </div>
+      <form id="inquiryForm" class="scroll-animate fade-up bg-gray-50 dark:bg-gray-700 p-8 rounded-2xl shadow-xl">
+        <label class="block mb-2 font-semibold"><i class="fas fa-search ml-2 text-indigo-500"></i>أدخل رقم التليفون</label>
+        <input type="tel" id="iPhone" class="w-full mb-6 p-3 border rounded-xl bg-white dark:bg-gray-600 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl w-full font-bold transition-all flex items-center justify-center gap-2">
+          <i class="fas fa-search"></i> ابحث
+        </button>
+      </form>
+      <div id="inquiryResponse" class="mt-4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl hidden"></div>
+    </div>
+  </section>
+
+  <!-- Inquiries Form -->
+  <section id="inquiries" class="py-24 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-6 max-w-lg">
+      <div class="scroll-animate zoom-in text-center mb-8">
+        <span class="text-indigo-500 font-semibold text-sm uppercase tracking-wider">لديك سؤال؟</span>
+        <h2 class="text-4xl md:text-5xl font-bold mt-2">تواصل معنا</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full mt-4"></div>
+      </div>
+      <form id="contactForm" class="scroll-animate fade-up bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-user ml-2 text-indigo-500"></i>الاسم</label>
+          <input type="text" id="cName" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-envelope ml-2 text-indigo-500"></i>البريد الإلكتروني</label>
+          <input type="email" id="cEmail" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2 font-semibold"><i class="fas fa-phone ml-2 text-indigo-500"></i>رقم التليفون</label>
+          <input type="tel" id="cPhone" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required>
+        </div>
+        <div class="mb-6">
+          <label class="block mb-2 font-semibold"><i class="fas fa-comment ml-2 text-indigo-500"></i>رسالتك</label>
+          <textarea id="cMessage" rows="4" class="w-full p-3 border rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2">
+          <i class="fas fa-paper-plane"></i> إرسال
+        </button>
+      </form>
+      <div id="contactResponse" class="mt-4 text-center"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <i class="fas fa-hand-sparkles text-2xl text-indigo-400"></i>
+            <h3 class="text-xl font-bold">مركز بداية</h3>
+          </div>
+          <p class="text-gray-400">للتدخل المبكر والتأهيل</p>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3">روابط سريعة</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#home" class="hover:text-indigo-400 transition">الرئيسية</a></li>
+            <li><a href="#about" class="hover:text-indigo-400 transition">معلومات عنا</a></li>
+            <li><a href="#services" class="hover:text-indigo-400 transition">خدماتنا</a></li>
+            <li><a href="#booking" class="hover:text-indigo-400 transition">الحجز</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3">تواصل معنا</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><i class="fas fa-phone ml-2"></i>01278127159</li>
+            <li><i class="fab fa-whatsapp ml-2"></i>واتساب: 01278127159</li>
+            <li><i class="fas fa-map-marker-alt ml-2"></i>امبابة، القاهرة</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold mb-3">مواعيد العمل</h4>
+          <ul class="space-y-1 text-gray-400">
+            <li>السبت: 2م - 11م</li>
+            <li>الاحد: 6 م - 11 م</li>
+            <li>الاثنين: 6 م - 11 م</li>
+            <li>الثلاثاء: 6 م - 11 م</li>
+            <li>الاربعاء: 6 م - 11 م</li>
+            <li>الخميس: 6 م - 11 م</li>
+            <li>الجمعة: 2 م - 11 م</li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center pt-8 border-t border-gray-800">
+        <p>&copy; 2025 مركز بداية. جميع الحقوق محفوظة</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== ANIMATION ON SCROLL (Lightweight) ====================
+    const animateElements = document.querySelectorAll('.scroll-animate');
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -30px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    animateElements.forEach(el => observer.observe(el));
+
+    // ==================== DARK MODE ====================
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+      themeIcon.textContent = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', isDark);
+      themeIcon.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    // ==================== MOBILE MENU ====================
+    const mobileMenuButton = document.querySelector('.mobile-menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    function toggleMobileButton() {
+      if (window.innerWidth <= 768) {
+        mobileMenuButton.classList.remove('hidden');
+      } else {
+        mobileMenuButton.classList.add('hidden');
+        mobileMenu.classList.remove('active');
+      }
+    }
+    window.addEventListener('load', toggleMobileButton);
+    window.addEventListener('resize', toggleMobileButton);
+    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+    document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('active'));
+    });
+
+    // ==================== BOOKING FORM ====================
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingResponse = document.getElementById('bookingResponse');
+    bookingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const bookingData = {
+        name: document.getElementById('bName').value.trim(),
+        phone: document.getElementById('bPhone').value.trim(),
+        date: document.getElementById('bDate').value,
+        time: document.getElementById('bTime').value
+      };
+      try {
+        const res = await fetch('/api/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookingData)
+        });
+        const data = await res.json();
+        if (res.ok) {
+          bookingResponse.innerHTML = `<div class="text-green-600 dark:text-green-400">✅ ${data.message}</div>`;
+          bookingForm.reset();
+        } else {
+          bookingResponse.innerHTML = `<div class="text-red-600">❌ ${data.error || 'حدث خطأ'}</div>`;
+        }
+      } catch (error) {
+        bookingResponse.innerHTML = '<div class="text-red-600">❌ تعذر الاتصال بالخادم</div>';
+      }
+    });
+
+    // ==================== RESULT INQUIRY ====================
+    const inquiryForm = document.getElementById('inquiryForm');
+    const inquiryResponse = document.getElementById('inquiryResponse');
+    inquiryForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('iPhone').value.trim();
+      inquiryResponse.classList.remove('hidden');
+      inquiryResponse.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-2xl"></i> جاري البحث...</div>';
+      try {
+        const res = await fetch(`/api/results/${phone}`);
+        const data = await res.json();
+        if (data.success && data.results.length > 0) {
+          const result = data.results[0];
+          inquiryResponse.innerHTML = `
+            <div class="bg-green-100 dark:bg-green-900 border border-green-400 rounded-xl p-4">
+              <div class="flex items-center gap-2 mb-3">
+                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                <h3 class="font-bold text-lg">تم العثور على النتيجة</h3>
+              </div>
+              <p class="mb-2"><strong>رقم الهاتف:</strong> ${result.phone}</p>
+              <a href="${result.fileUrl}" class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-all" target="_blank">
+                <i class="fas fa-download"></i> تحميل النتيجة
+              </a>
+              <p class="text-sm text-gray-500 mt-3">تم الرفع: ${new Date(result.uploadedAt).toLocaleString('ar-EG')}</p>
+            </div>
+          `;
+        } else {
+          inquiryResponse.innerHTML = `<div class="bg-red-100 dark:bg-red-900 border border-red-400 rounded-xl p-4 text-red-700 dark:text-red-200">❌ ${data.message || 'لا توجد نتائج'}</div>`;
+        }
+      } catch (error) {
+        inquiryResponse.innerHTML = '<div class="bg-red-100 dark:bg-red-900 border border-red-400 rounded-xl p-4 text-red-700 dark:text-red-200">❌ تعذر الاتصال بالخادم</div>';
+      }
+    });
+
+    // ==================== CONTACT FORM ====================
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('cName').value.trim();
+      const email = document.getElementById('cEmail').value.trim();
+      const phone = document.getElementById('cPhone').value.trim();
+      const message = document.getElementById('cMessage').value.trim();
+      if (!name || !email || !phone || !message) {
+        alert('من فضلك املأ جميع الحقول');
+        return;
+      }
+      try {
+        await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone })
+        });
+        const msgRes = await fetch('/api/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message, phone })
+        });
+        const msgData = await msgRes.json();
+        alert(msgData.message || 'تم الإرسال بنجاح');
+        document.getElementById('contactForm').reset();
+      } catch (error) {
+        alert('حدث خطأ أثناء الإرسال. حاول مرة أخرى.');
+      }
+    });
+
+    // ==================== SECURITY ====================
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>
