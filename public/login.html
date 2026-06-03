@@ -237,7 +237,7 @@
   <script>
     // التحقق من وجود توكن مسبقاً
     if (localStorage.getItem('token')) {
-      window.location.href = '/dashboard';
+      window.location.href = '/admin-dashboard.html';
     }
 
     // تطبيق وضع الألوان المحفوظ
@@ -312,7 +312,7 @@
           });
           
           if (authCheck.ok) {
-            window.location.href = '/dashboard';
+            window.location.href = '/admin-dashboard.html';
           } else {
             errorMsg.textContent = 'فشل التحقق من الصلاحية';
             localStorage.removeItem('token');
