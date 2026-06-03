@@ -81,8 +81,9 @@
   </div>
 
   <script>
-    const token = localStorage.getItem('token');
-    if (!token) window.location.href = '/admin-login.html';
+    // تغيير اسم التوكن من 'token' إلى 'adminToken' ليتوافق مع login.html
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/login';
 
     // Dark mode
     if (localStorage.getItem('dashboardDark') === 'true') document.body.classList.add('dark');
@@ -93,7 +94,10 @@
 
     async function fetchWithAuth(url, options = {}) {
       const res = await fetch(url, { ...options, headers: { ...options.headers, 'Authorization': `Bearer ${token}` } });
-      if (res.status === 401) { localStorage.removeItem('token'); window.location.href = '/admin-login.html'; }
+      if (res.status === 401) { 
+        localStorage.removeItem('adminToken'); 
+        window.location.href = '/login'; 
+      }
       return res;
     }
 
@@ -103,24 +107,27 @@
       const users = await res.json();
       document.getElementById('usersContainer').innerHTML = `
         <table class="w-full text-sm"><thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>الرسائل</th><th></th></tr></thead><tbody>
-        ${users.map(u => `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td><td class="max-w-xs truncate">${u.messages.substring(0,50)}</td><td><button onclick="deleteUser('${u.email}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button></td></tr>`).join('')}
+        ${users.map(u => `<tr><td class="whitespace-nowrap">${u.name}</td><td class="whitespace-nowrap">${u.email}</td><td class="whitespace-nowrap">${u.phone}</td><td class="max-w-xs truncate">${(u.messages || '').substring(0,50)}</td><td><button onclick="deleteUser('${u.email}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button></td>`).join('')}
         </tbody></table>`;
     }
+    
     async function loadBookings() {
       const res = await fetchWithAuth('/api/admin/bookings');
       const bookings = await res.json();
-      document.getElementById('bookingsContainer').innerHTML = `<table class="w-full text-sm"><thead><tr><th>الاسم</th><th>الهاتف</th><th>التاريخ</th><th>الوقت</th><th></th></tr></thead><tbody>${bookings.map(b => `<tr><td>${b.name}</td><td>${b.phone}</td><td>${b.date}</td><td>${b.time}</td><td><button onclick="deleteBooking('${b.phone}')" class="bg-red-500 text-white px-2 py-1 rounded">حذف</button></td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('bookingsContainer').innerHTML = `<table class="w-full text-sm"><thead><tr><th>الاسم</th><th>الهاتف</th><th>التاريخ</th><th>الوقت</th><th></th></tr></thead><tbody>${bookings.map(b => `<tr><td class="whitespace-nowrap">${b.name}</td><td class="whitespace-nowrap">${b.phone}</td><td class="whitespace-nowrap">${b.date}</td><td class="whitespace-nowrap">${b.time}</td><td><button onclick="deleteBooking('${b.phone}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button></td>`).join('')}</tbody></table>`;
     }
+    
     async function loadResults() {
       const res = await fetchWithAuth('/api/admin/results');
       const results = await res.json();
-      document.getElementById('resultsContainer').innerHTML = `<table class="w-full"><thead><tr><th>رقم الهاتف</th><th>الملف</th><th>التاريخ</th><th></th></tr></thead><tbody>${results.map(r => `<tr><td>${r.phone}</td><td><a href="${r.fileUrl}" target="_blank" class="text-indigo-600">عرض</a></td><td>${new Date(r.uploadedAt).toLocaleDateString()}</td><td><button onclick="deleteResult('${r.phone}')" class="bg-red-500 px-2 py-1 rounded text-white">حذف</button></td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('resultsContainer').innerHTML = `<table class="w-full"><thead><tr><th>رقم الهاتف</th><th>الملف</th><th>التاريخ</th><th></th></tr></thead><tbody>${results.map(r => `<tr><td class="whitespace-nowrap">${r.phone}</td><td><a href="${r.fileUrl}" target="_blank" class="text-indigo-600">عرض</a></td><td class="whitespace-nowrap">${new Date(r.uploadedAt).toLocaleDateString()}</td><td><button onclick="deleteResult('${r.phone}')" class="bg-red-500 px-2 py-1 rounded text-white text-xs">حذف</button></td>`).join('')}</tbody></tr>`;
     }
+    
     async function loadSales() {
       const res = await fetchWithAuth('/api/admin/sales/today');
       const data = await res.json();
-      document.getElementById('todayTotalSales').innerHTML = data.todayTotal;
-      document.getElementById('salesList').innerHTML = `<table class="w-full mt-4"><thead><tr><th>العميل</th><th>المبلغ</th><th>الوقت</th><th></th></tr></thead><tbody>${data.sales.map(s => `<tr><td>${s.customerName}</td><td>${s.amount} ج</td><td>${new Date(s.saleTime).toLocaleTimeString()}</td><td><button onclick="deleteSale('${s.id}')" class="bg-red-500 px-2 py-1 rounded text-white">حذف</button></td></tr>`).join('')}</tbody></table>`;
+      document.getElementById('todayTotalSales').innerHTML = data.todayTotal || '0';
+      document.getElementById('salesList').innerHTML = `<table class="w-full mt-4"><thead><tr><th>العميل</th><th>المبلغ</th><th>الوقت</th><th></th></tr></thead><tbody>${(data.sales || []).map(s => `<tr><td class="whitespace-nowrap">${s.customerName}</td><td class="whitespace-nowrap">${s.amount} ج</td><td class="whitespace-nowrap">${new Date(s.saleTime).toLocaleTimeString()}</td><td><button onclick="deleteSale('${s.id}')" class="bg-red-500 px-2 py-1 rounded text-white text-xs">حذف</button></td>`).join('')}</tbody></table>`;
     }
 
     window.deleteUser = async (email) => { if(confirm('حذف المستخدم؟')){ await fetchWithAuth(`/api/admin/user/${encodeURIComponent(email)}`, {method:'DELETE'}); loadUsers(); }};
@@ -133,27 +140,41 @@
       const customerName = document.getElementById('customerName').value;
       const amount = document.getElementById('saleAmount').value;
       await fetchWithAuth('/api/admin/sales', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({customerName, amount}) });
-      loadSales(); e.target.reset();
+      loadSales(); 
+      e.target.reset();
     });
+    
     document.getElementById('uploadResultForm').addEventListener('submit', async(e) => {
       e.preventDefault();
       const fd = new FormData();
       fd.append('phone', document.getElementById('resultPhone').value);
       fd.append('resultFile', document.getElementById('resultFile').files[0]);
       await fetchWithAuth('/api/upload-result', { method:'POST', body:fd });
-      loadResults(); e.target.reset();
+      loadResults(); 
+      e.target.reset();
+      alert('تم رفع النتيجة بنجاح');
     });
+    
     document.getElementById('adminMessageForm').addEventListener('submit', async(e) => {
       e.preventDefault();
       const email = document.getElementById('targetEmail').value;
       const message = document.getElementById('messageText').value;
       await fetchWithAuth('/api/admin/message', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, message}) });
-      alert('تم الإرسال'); e.target.reset();
+      alert('تم إرسال الرسالة بنجاح'); 
+      e.target.reset();
     });
+    
     document.getElementById('viewSalesBtn').addEventListener('click', () => document.getElementById('salesList').classList.toggle('hidden'));
-    document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('token'); window.location.href='/admin-login.html'; });
+    
+    document.getElementById('logoutBtn').addEventListener('click', () => { 
+      localStorage.removeItem('adminToken'); 
+      window.location.href = '/login'; 
+    });
 
-    loadUsers(); loadBookings(); loadResults(); loadSales();
+    loadUsers(); 
+    loadBookings(); 
+    loadResults(); 
+    loadSales();
   </script>
 </body>
 </html>
