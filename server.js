@@ -351,7 +351,7 @@ function createPremiumEmailTemplate(title, content, userName = '', type = 'gener
           ` : `
           <div class="greeting">
             <span class="greeting-icon">✨</span>
-            <span>السلام عليكم ورحمة الله</span>
+            <span>مرحباً</span>
           </div>
           `}
           
