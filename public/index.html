@@ -2,401 +2,948 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>بداية | مركز التدخل المبكر والتأهيل</title>
-  <!-- Tailwind CSS + Font Awesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>بداية للتدخل المبكر والتأهيل | مركز متخصص في التخاطب وتنمية المهارات</title>
+  <meta name="description" content="مركز بداية للتدخل المبكر والتأهيل - خدمات متخصصة في التخاطب، تنمية المهارات، تعديل السلوك، صعوبات التعلم، والإرشاد النفسي. احجز موعدك الآن.">
+  <meta name="keywords" content="تدخل مبكر, تأهيل, تخاطب, تنمية مهارات, تعديل سلوك, صعوبات تعلم, إرشاد نفسي">
+  <meta name="author" content="Bedaya Center">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bedaya-center.vercel.app/">
+  <meta property="og:title" content="بداية للتدخل المبكر والتأهيل">
+  <meta property="og:description" content="مركز متخصص في التخاطب، تنمية المهارات، تعديل السلوك، وصعوبات التعلم">
+  <meta property="og:image" content="https://i.postimg.cc/PqYGJKTd/Logo.jpg">
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="بداية للتدخل المبكر والتأهيل">
+  <meta name="twitter:description" content="مركز متخصص في التخاطب، تنمية المهارات، تعديل السلوك، وصعوبات التعلم">
+  <meta name="twitter:image" content="https://i.postimg.cc/PqYGJKTd/Logo.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/PqYGJKTd/Logo.jpg">
+  
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React Hot Toast -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            'cairo': ['Cairo', 'sans-serif'],
+            cairo: ['Cairo', 'sans-serif'],
           },
           animation: {
-            'float': 'float 6s ease-in-out infinite',
-            'glow': 'glow 2s ease-in-out infinite alternate',
-            'fade-in-up': 'fadeInUp 0.8s ease-out',
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.3s ease-out',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
           },
           keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
             },
-            glow: {
-              '0%': { textShadow: '0 0 5px rgba(99,102,241,0.5)' },
-              '100%': { textShadow: '0 0 20px rgba(99,102,241,0.8)' },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
             },
-            fadeInUp: {
-              '0%': { opacity: '0', transform: 'translateY(30px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
+          },
+          backdropBlur: {
+            xs: '2px',
           },
         },
       },
     }
   </script>
+  
   <style>
     * {
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    html {
       scroll-behavior: smooth;
     }
-    body {
-      font-family: 'Cairo', 'Tajawal', sans-serif;
-    }
-    .glass-card {
+    
+    /* Glassmorphism Styles */
+    .glass {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .glass-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    
+    .dark .glass {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .dark .glass-card {
-      background: rgba(0, 0, 0, 0.4);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    .hero-gradient {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    .dark .hero-gradient {
-      background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
-    }
-    .btn-modern {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    .btn-modern::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-    .btn-modern:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    .nav-link {
-      position: relative;
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      right: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #818cf8, #c084fc);
-      transition: width 0.3s ease;
-    }
-    .nav-link:hover::after {
-      width: 100%;
-    }
-    /* Scrollbar */
+    
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
+      height: 8px;
     }
+    
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #818cf8;
       border-radius: 10px;
     }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #6366f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4f46e5;
+    }
+    
     .dark ::-webkit-scrollbar-track {
       background: #1f2937;
     }
-    /* Custom loading spinner */
+    
+    /* Loading Spinner */
     .spinner {
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top-color: #6366f1;
+      border-radius: 50%;
       width: 40px;
       height: 40px;
-      border: 4px solid rgba(129, 140, 248, 0.3);
-      border-radius: 50%;
-      border-top-color: #818cf8;
-      animation: spin 1s ease-in-out infinite;
+      animation: spin 0.8s linear infinite;
     }
+    
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    
+    /* Smooth Transitions */
+    .transition-theme {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Card Hover Effects */
+    .hover-card {
+      transition: all 0.3s ease;
+    }
+    
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    }
+    
+    /* Input Focus Styles */
+    .input-focus:focus {
+      outline: none;
+      ring: 2px solid #6366f1;
+      border-color: #6366f1;
+    }
+    
+    /* Mobile Menu Animation */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
   </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-500">
-
-  <!-- زر الوضع الداكن/فاتح ثابت -->
-  <button id="themeToggle" class="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center text-2xl">
-    <span id="themeIcon">🌙</span>
-  </button>
-
-  <!-- الهيدر مع الشعار -->
-  <header class="fixed top-0 w-full z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <!-- Logo + اسم -->
-      <a href="#home" class="flex items-center gap-3 group">
-        <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="Bedaya Logo" class="w-12 h-12 rounded-full object-cover shadow-lg group-hover:scale-105 transition-transform">
-        <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">بداية</span>
-      </a>
-      
-      <!-- القائمة للشاشات الكبيرة -->
-      <nav class="hidden md:block">
-        <ul class="flex gap-6">
-          <li><a href="#home" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">الرئيسية</a></li>
-          <li><a href="#booking" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">الحجز</a></li>
-          <li><a href="#result" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">النتيجة</a></li>
-          <li><a href="#contact" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">موقعنا</a></li>
-          <li><a href="#about" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">عن بداية</a></li>
-          <li><a href="#inquiries" class="nav-link text-gray-700 dark:text-gray-200 hover:text-indigo-500 transition">تواصل</a></li>
-        </ul>
-      </nav>
-      
-      <!-- زر القائمة للجوال -->
-      <button id="mobileMenuBtn" class="md:hidden text-2xl text-gray-700 dark:text-gray-200">
-        <i class="fas fa-bars"></i>
-      </button>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-theme font-cairo">
+  
+  <!-- Sticky Navbar with Backdrop Blur -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg transition-theme">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center space-x-3 space-x-reverse">
+          <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="بداية للتدخل المبكر والتأهيل" class="w-12 h-12 rounded-full object-cover shadow-md">
+          <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">بداية</span>
+        </a>
+        
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:block">
+          <ul class="flex space-x-1 space-x-reverse">
+            <li><a href="#home" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">الرئيسية</a></li>
+            <li><a href="#about" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">عن المركز</a></li>
+            <li><a href="#statistics" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">إنجازاتنا</a></li>
+            <li><a href="#booking" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">حجز موعد</a></li>
+            <li><a href="#result" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">الاستعلام عن النتيجة</a></li>
+            <li><a href="#contact" class="nav-link px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">اتصل بنا</a></li>
+          </ul>
+        </nav>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuButton" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fas fa-bars text-2xl text-gray-700 dark:text-gray-300"></i>
+        </button>
+      </div>
     </div>
-    <!-- قائمة جوال -->
-    <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-gray-800 shadow-lg rounded-b-2xl transition-all">
-      <ul class="flex flex-col items-center py-4 gap-3">
-        <li><a href="#home" class="nav-link py-2">الرئيسية</a></li>
-        <li><a href="#booking" class="nav-link py-2">الحجز</a></li>
-        <li><a href="#result" class="nav-link py-2">النتيجة</a></li>
-        <li><a href="#contact" class="nav-link py-2">موقعنا</a></li>
-        <li><a href="#about" class="nav-link py-2">عن بداية</a></li>
-        <li><a href="#inquiries" class="nav-link py-2">تواصل</a></li>
+    
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-2xl z-50 p-6">
+      <button id="closeMobileMenu" class="absolute top-4 left-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+        <i class="fas fa-times text-xl text-gray-700 dark:text-gray-300"></i>
+      </button>
+      <ul class="mt-16 space-y-4">
+        <li><a href="#home" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">الرئيسية</a></li>
+        <li><a href="#about" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">عن المركز</a></li>
+        <li><a href="#statistics" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">إنجازاتنا</a></li>
+        <li><a href="#booking" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">حجز موعد</a></li>
+        <li><a href="#result" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">الاستعلام عن النتيجة</a></li>
+        <li><a href="#contact" class="mobile-nav-link block py-3 px-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all">اتصل بنا</a></li>
+        <li class="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <a href="/login" class="block py-3 px-4 rounded-lg bg-indigo-600 text-white text-center hover:bg-indigo-700 transition-all">دخول الموظفين</a>
+        </li>
       </ul>
     </div>
   </header>
-
-  <div class="pt-20"></div>
-
-  <!-- القسم الرئيسي Hero -->
+  
+  <!-- Spacer for fixed navbar -->
+  <div class="h-20"></div>
+  
+  <!-- Hero Section -->
   <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 hero-gradient opacity-90"></div>
-    <div class="absolute inset-0 bg-[url('https://i.postimg.cc/pT7cQcJy/464077830-122097874184585064-7225992681099549192-n.jpg')] bg-cover bg-center mix-blend-overlay"></div>
-    <div class="relative z-10 text-center px-6 animate-fade-in-up">
-      <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="Logo" class="w-32 h-32 rounded-full mx-auto mb-6 shadow-2xl border-4 border-white dark:border-indigo-400 animate-float">
-      <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-2xl">مركز بداية</h1>
-      <p class="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">للتدخل المبكر والتأهيل - نخبة من أفضل المتخصصين في تخاطب، تعديل سلوك، وصعوبات تعلم</p>
-      <div class="mt-8 flex gap-4 justify-center flex-wrap">
-        <a href="#booking" class="btn-modern px-8 py-3 bg-white text-indigo-600 rounded-full font-bold shadow-lg hover:shadow-xl transition">احجز موعدك الآن</a>
-        <a href="#about" class="btn-modern px-8 py-3 bg-transparent border-2 border-white text-white rounded-full font-bold hover:bg-white hover:text-indigo-600 transition">تعرف علينا</a>
-      </div>
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0">
+      <img src="https://i.postimg.cc/pT7cQcJy/464077830-122097874184585064-7225992681099549192-n.jpg" alt="مركز بداية للتدخل المبكر والتأهيل" class="w-full h-full object-cover" loading="lazy">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/70 via-indigo-800/60 to-emerald-900/70"></div>
     </div>
-  </section>
-
-  <!-- قسم من نحن -->
-  <section id="about" class="py-20 px-6">
-    <div class="container mx-auto text-center">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">مركز بداية</h2>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-        نقدم خدمات متكاملة في: التخاطب، تنمية المهارات، تعديل السلوك، صعوبات التعلم، الإرشاد النفسي، والاختبارات النفسية. فريقنا مؤهل لرعاية أطفالكم وأسركم ببيئة آمنة ومحفزة.
+    
+    <!-- Hero Content -->
+    <div class="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 animate-fade-in">
+      <!-- Logo in Hero -->
+      <div class="mb-8">
+        <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="بداية للتدخل المبكر والتأهيل" class="w-28 h-28 rounded-full mx-auto border-4 border-white shadow-2xl object-cover">
+      </div>
+      
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+        مركز بداية
+        <span class="block text-indigo-200 text-2xl sm:text-3xl lg:text-4xl mt-2">للتدخل المبكر والتأهيل</span>
+      </h1>
+      
+      <p class="text-lg sm:text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
+        نقدم خدمات متخصصة في التخاطب، تنمية المهارات، تعديل السلوك، صعوبات التعلم، والإرشاد النفسي
       </p>
-    </div>
-  </section>
-
-  <!-- الحجز -->
-  <section id="booking" class="py-20 px-6 bg-white/50 dark:bg-gray-800/30">
-    <div class="container mx-auto max-w-2xl">
-      <div class="glass-card rounded-2xl p-8 shadow-2xl">
-        <h2 class="text-3xl font-bold text-center mb-6 text-indigo-600 dark:text-indigo-400"><i class="fas fa-calendar-check ml-2"></i>احجز موعدك</h2>
-        <form id="bookingForm" class="space-y-4">
-          <input type="text" id="bName" placeholder="الاسم الكامل" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none" required>
-          <input type="tel" id="bPhone" placeholder="رقم التليفون" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500" required>
-          <input type="date" id="bDate" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700" required>
-          <input type="time" id="bTime" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700" required>
-          <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-3 rounded-xl font-bold text-lg hover:scale-105 transition-transform">احجز الآن <i class="fas fa-arrow-left"></i></button>
-        </form>
-        <p id="bookingResponse" class="mt-4 text-center font-semibold"></p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#booking" class="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg">
+          <i class="fas fa-calendar-alt ml-2"></i>
+          احجز موعدك الآن
+        </a>
+        <a href="#about" class="px-8 py-4 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-xl font-semibold transition-all border border-white/30">
+          <i class="fas fa-info-circle ml-2"></i>
+          تعرف علينا
+        </a>
       </div>
     </div>
-  </section>
-
-  <!-- الاستعلام عن النتيجة -->
-  <section id="result" class="py-20 px-6">
-    <div class="container mx-auto max-w-2xl">
-      <div class="glass-card rounded-2xl p-8">
-        <h2 class="text-3xl font-bold text-center mb-6 text-indigo-600 dark:text-indigo-400"><i class="fas fa-search ml-2"></i>استعلم عن نتيجتك</h2>
-        <form id="inquiryForm" class="space-y-4">
-          <input type="tel" id="iPhone" placeholder="أدخل رقم الهاتف" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700" required>
-          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl font-bold transition">ابحث <i class="fas fa-search"></i></button>
-        </form>
-        <div id="inquiryResponse" class="mt-6 hidden"></div>
-      </div>
+    
+    <!-- Animated Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <i class="fas fa-chevron-down text-white text-2xl"></i>
     </div>
   </section>
-
-  <!-- المكان و التواصل -->
-  <section id="contact" class="py-20 px-6 bg-white/50 dark:bg-gray-800/30">
+  
+  <!-- About Section -->
+  <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 transition-theme">
     <div class="container mx-auto">
-      <h2 class="text-4xl font-bold text-center mb-12">📍 موقعنا و التواصل</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="glass-card rounded-2xl p-6 text-center">
-          <i class="fas fa-map-marker-alt text-4xl text-indigo-500 mb-4"></i>
-          <h3 class="text-xl font-bold mb-2">العنوان</h3>
-          <p>٢٩ شارع سلطان أبو العلا، العروبة، أمبابة</p>
-        </div>
-        <div class="glass-card rounded-2xl p-6 text-center">
-          <i class="fas fa-clock text-4xl text-indigo-500 mb-4"></i>
-          <h3 class="text-xl font-bold mb-2">أوقات العمل</h3>
-          <p>السبت: 2م - 11م</p>
-          <p>الجمعة: 2م - 11م</p>
-          <p>أيام أخرى: 6م - 11م</p>
-        </div>
-        <div class="glass-card rounded-2xl p-6 text-center">
-          <i class="fas fa-phone-alt text-4xl text-indigo-500 mb-4"></i>
-          <h3 class="text-xl font-bold mb-2">اتصل بنا</h3>
-          <a href="https://wa.me/201278127159" class="inline-flex items-center gap-2 bg-green-500 px-4 py-2 rounded-full text-white mb-3 hover:scale-105 transition"><i class="fab fa-whatsapp"></i> واتساب</a>
-          <a href="tel:01278127159" class="inline-flex items-center gap-2 bg-blue-500 px-4 py-2 rounded-full text-white hover:scale-105 transition"><i class="fas fa-phone"></i> اتصل</a>
-        </div>
+      <div class="text-center mb-12">
+        <h2 class="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+          من نحن؟
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-600 to-emerald-600 mx-auto rounded-full"></div>
       </div>
-    </div>
-  </section>
-
-  <!-- نموذج الاستفسار -->
-  <section id="inquiries" class="py-20 px-6">
-    <div class="container mx-auto max-w-2xl">
-      <div class="glass-card rounded-2xl p-8">
-        <h2 class="text-3xl font-bold text-center mb-6"><i class="fas fa-envelope ml-2"></i>تواصل معنا</h2>
-        <form id="contactForm" class="space-y-4">
-          <input type="text" id="cName" placeholder="الاسم" class="w-full p-3 rounded-xl border dark:border-gray-600 bg-white dark:bg-gray-700" required>
-          <input type="email" id="cEmail" placeholder="البريد الإلكتروني" class="w-full p-3 rounded-xl border dark:border-gray-600" required>
-          <input type="tel" id="cPhone" placeholder="رقم التليفون" class="w-full p-3 rounded-xl border dark:border-gray-600" required>
-          <textarea id="cMessage" rows="4" placeholder="رسالتك..." class="w-full p-3 rounded-xl border dark:border-gray-600" required></textarea>
-          <button type="submit" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-xl font-bold hover:scale-105 transition">إرسال <i class="fas fa-paper-plane"></i></button>
-        </form>
-        <p id="contactResponseMsg" class="mt-4 text-center"></p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="bg-gray-900 text-white py-8 text-center">
-    <p>© 2025 مركز بداية - جميع الحقوق محفوظة</p>
-  </footer>
-
-  <script>
-    // ======================== DARK MODE ========================
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.documentElement.classList.add('dark');
-      themeIcon.textContent = '☀️';
-    }
-    themeToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      const isDark = document.documentElement.classList.contains('dark');
-      localStorage.setItem('darkMode', isDark);
-      themeIcon.textContent = isDark ? '☀️' : '🌙';
-    });
-
-    // Mobile menu
-    const mobileBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    mobileBtn?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    document.querySelectorAll('#mobileMenu a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-
-    // ======================== Booking ========================
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingResponse = document.getElementById('bookingResponse');
-    bookingForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = {
-        name: document.getElementById('bName').value.trim(),
-        phone: document.getElementById('bPhone').value.trim(),
-        date: document.getElementById('bDate').value,
-        time: document.getElementById('bTime').value
-      };
-      try {
-        const res = await fetch('/api/booking', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
-        if (res.ok) {
-          bookingResponse.innerHTML = `<span class="text-green-600">✅ ${result.message}</span>`;
-          bookingForm.reset();
-        } else {
-          bookingResponse.innerHTML = `<span class="text-red-600">❌ ${result.error}</span>`;
-        }
-      } catch (err) {
-        bookingResponse.innerHTML = `<span class="text-red-600">⚠️ خطأ في الشبكة</span>`;
-      }
-    });
-
-    // ======================== Inquiry Result ========================
-    const inquiryForm = document.getElementById('inquiryForm');
-    const inquiryResponseDiv = document.getElementById('inquiryResponse');
-    inquiryForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const phone = document.getElementById('iPhone').value.trim();
-      inquiryResponseDiv.innerHTML = '<div class="spinner mx-auto"></div>';
-      inquiryResponseDiv.classList.remove('hidden');
-      try {
-        const res = await fetch(`/api/results/${phone}`);
-        const data = await res.json();
-        if (data.success && data.results.length > 0) {
-          const result = data.results[0];
-          inquiryResponseDiv.innerHTML = `
-            <div class="bg-green-100 dark:bg-green-900 p-4 rounded-xl text-center">
-              <i class="fas fa-check-circle text-green-600 text-3xl mb-2"></i>
-              <p class="font-bold">تم العثور على نتيجتك</p>
-              <a href="${result.fileUrl}" target="_blank" class="inline-block mt-3 bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">تحميل النتيجة <i class="fas fa-download"></i></a>
-              <p class="text-sm mt-2">تاريخ الرفع: ${new Date(result.uploadedAt).toLocaleDateString('ar-EG')}</p>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6 animate-slide-up">
+          <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            مركز بداية للتدخل المبكر والتأهيل هو مؤسسة متخصصة تهدف إلى تقديم أفضل الخدمات العلاجية والتأهيلية للأطفال والبالغين.
+          </p>
+          <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            نتميز بفريق من المتخصصين ذوي الخبرة العالية في مجالات التخاطب، تنمية المهارات، تعديل السلوك، صعوبات التعلم، والإرشاد النفسي.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-4">
+            <div class="flex items-center space-x-3 space-x-reverse">
+              <i class="fas fa-check-circle text-emerald-500 text-2xl"></i>
+              <span class="text-gray-700 dark:text-gray-300">تشخيص دقيق</span>
             </div>
-          `;
-        } else {
-          inquiryResponseDiv.innerHTML = `<div class="bg-red-100 dark:bg-red-900 p-4 rounded-xl text-center text-red-700">❌ لا توجد نتائج لهذا الرقم</div>`;
-        }
-      } catch (err) {
-        inquiryResponseDiv.innerHTML = `<div class="bg-red-100 p-4 rounded-xl text-center">⚠️ خطأ في الاتصال بالخادم</div>`;
-      }
-    });
+            <div class="flex items-center space-x-3 space-x-reverse">
+              <i class="fas fa-check-circle text-emerald-500 text-2xl"></i>
+              <span class="text-gray-700 dark:text-gray-300">خطط علاجية فردية</span>
+            </div>
+            <div class="flex items-center space-x-3 space-x-reverse">
+              <i class="fas fa-check-circle text-emerald-500 text-2xl"></i>
+              <span class="text-gray-700 dark:text-gray-300">متابعة مستمرة</span>
+            </div>
+            <div class="flex items-center space-x-3 space-x-reverse">
+              <i class="fas fa-check-circle text-emerald-500 text-2xl"></i>
+              <span class="text-gray-700 dark:text-gray-300">بيئة آمنة ومحفزة</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+          <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="عن مركز بداية" class="relative rounded-2xl shadow-2xl w-full object-cover" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Statistics Section -->
+  <section id="statistics" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800 transition-theme">
+    <div class="container mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+          إنجازاتنا
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-600 to-emerald-600 mx-auto rounded-full"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover-card">
+          <div class="text-5xl font-bold text-indigo-600 mb-3">500+</div>
+          <div class="text-gray-600 dark:text-gray-400">طفل تم تأهيلهم</div>
+        </div>
+        <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover-card">
+          <div class="text-5xl font-bold text-indigo-600 mb-3">1000+</div>
+          <div class="text-gray-600 dark:text-gray-400">جلسة علاجية</div>
+        </div>
+        <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover-card">
+          <div class="text-5xl font-bold text-indigo-600 mb-3">15+</div>
+          <div class="text-gray-600 dark:text-gray-400">متخصص معتمد</div>
+        </div>
+        <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover-card">
+          <div class="text-5xl font-bold text-indigo-600 mb-3">98%</div>
+          <div class="text-gray-600 dark:text-gray-400">رضا العملاء</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Booking Section -->
+  <section id="booking" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 transition-theme">
+    <div class="container mx-auto max-w-2xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+          احجز موعدك
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-600 to-emerald-600 mx-auto rounded-full"></div>
+        <p class="text-gray-600 dark:text-gray-400 mt-4">احجز جلستك القادمة مع أفضل المتخصصين</p>
+      </div>
+      
+      <form id="bookingForm" class="glass rounded-2xl p-8 shadow-2xl">
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+              <i class="fas fa-user ml-2"></i>
+              الاسم كاملاً
+            </label>
+            <input type="text" id="bName" required 
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                   placeholder="أدخل اسمك">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+              <i class="fas fa-phone ml-2"></i>
+              رقم التليفون
+            </label>
+            <input type="tel" id="bPhone" required 
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                   placeholder="أدخل رقم هاتفك">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+              <i class="fas fa-calendar ml-2"></i>
+              التاريخ
+            </label>
+            <input type="date" id="bDate" required 
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+              <i class="fas fa-clock ml-2"></i>
+              الوقت
+            </label>
+            <input type="time" id="bTime" required 
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+          </div>
+          
+          <button type="submit" id="bookingSubmit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-semibold transition-all transform hover:scale-[1.02] shadow-lg">
+            <i class="fas fa-check-circle ml-2"></i>
+            تأكيد الحجز
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+  
+  <!-- Results Inquiry Section -->
+  <section id="result" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-theme">
+    <div class="container mx-auto max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+          الاستعلام عن النتيجة
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-600 to-emerald-600 mx-auto rounded-full"></div>
+        <p class="text-gray-600 dark:text-gray-400 mt-4">أدخل رقم التليفون للاستعلام عن نتيجة التقييم</p>
+      </div>
+      
+      <div class="glass rounded-2xl p-8 shadow-2xl">
+        <form id="inquiryForm">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <input type="tel" id="iPhone" required 
+                   class="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                   placeholder="أدخل رقم التليفون">
+            <button type="submit" id="inquirySubmit" class="px-8 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-xl font-semibold transition-all shadow-lg">
+              <i class="fas fa-search ml-2"></i>
+              بحث
+            </button>
+          </div>
+        </form>
+        
+        <div id="inquiryResponse" class="mt-8 hidden">
+          <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                <i class="fas fa-file-alt ml-2 text-indigo-600"></i>
+                نتيجة الاستعلام
+              </h3>
+              <button id="closeResult" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <i class="fas fa-times text-xl"></i>
+              </button>
+            </div>
+            
+            <div id="resultOptions" class="flex flex-col sm:flex-row gap-4 mb-4">
+              <button id="downloadResult" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-semibold transition-all">
+                <i class="fas fa-download ml-2"></i>
+                تحميل النتيجة
+              </button>
+              <button id="viewResult" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-xl font-semibold transition-all">
+                <i class="fas fa-eye ml-2"></i>
+                عرض النتيجة
+              </button>
+            </div>
+            
+            <div id="resultViewer" class="hidden">
+              <div id="loadingSpinner" class="flex justify-center py-8">
+                <div class="spinner"></div>
+              </div>
+              <iframe id="resultFrame" src="" class="w-full h-96 rounded-xl border border-gray-200 dark:border-gray-600 hidden"></iframe>
+              <img id="resultImage" src="" alt="النتيجة" class="w-full rounded-xl border border-gray-200 dark:border-gray-600 hidden">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 transition-theme">
+    <div class="container mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+          اتصل بنا
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-600 to-emerald-600 mx-auto rounded-full"></div>
+        <p class="text-gray-600 dark:text-gray-400 mt-4">نحن هنا لخدمتك - تواصل معنا بأي استفسار</p>
+      </div>
+      
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Contact Form -->
+        <div class="glass rounded-2xl p-8 shadow-2xl">
+          <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">أرسل لنا رسالة</h3>
+          <form id="contactForm">
+            <div class="space-y-5">
+              <div>
+                <label class="block text-sm font-semibold mb-2">الاسم</label>
+                <input type="text" id="cName" required 
+                       class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold mb-2">البريد الإلكتروني</label>
+                <input type="email" id="cEmail" required 
+                       class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold mb-2">رقم التليفون</label>
+                <input type="tel" id="cPhone" required 
+                       class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold mb-2">الرسالة</label>
+                <textarea id="cMessage" required rows="4"
+                          class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500"></textarea>
+              </div>
+              <button type="submit" id="contactSubmit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-semibold transition-all shadow-lg">
+                <i class="fas fa-paper-plane ml-2"></i>
+                إرسال الرسالة
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="space-y-6">
+          <div class="glass rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+              <i class="fas fa-map-marker-alt ml-2 text-indigo-600"></i>
+              العنوان
+            </h3>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+              ٢٩ شارع سلطان ابو العلا<br>
+              العروبة، امبابة
+            </p>
+          </div>
+          
+          <div class="glass rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+              <i class="fas fa-clock ml-2 text-indigo-600"></i>
+              ساعات العمل
+            </h3>
+            <div class="space-y-2 text-gray-700 dark:text-gray-300">
+              <p><span class="font-semibold">السبت:</span> 2 م - 11 م</p>
+              <p><span class="font-semibold">الأحد - الخميس:</span> 6 م - 11 م</p>
+              <p><span class="font-semibold">الجمعة:</span> 2 م - 11 م</p>
+            </div>
+          </div>
+          
+          <div class="glass rounded-2xl p-8 shadow-2xl">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+              <i class="fas fa-phone ml-2 text-indigo-600"></i>
+              تواصل معنا
+            </h3>
+            <div class="space-y-4">
+              <a href="https://wa.me/201278127159" target="_blank" 
+                 class="flex items-center justify-center space-x-3 space-x-reverse bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl transition-all w-full">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span>واتساب</span>
+              </a>
+              <a href="tel:01278127159" 
+                 class="flex items-center justify-center space-x-3 space-x-reverse bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-xl transition-all w-full">
+                <i class="fas fa-phone-alt text-xl"></i>
+                <span>اتصل بنا</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="بداية" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover">
+        <p class="text-gray-400 mb-4">مركز بداية للتدخل المبكر والتأهيل</p>
+        <div class="flex justify-center space-x-6 space-x-reverse mb-6">
+          <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">
+            <i class="fab fa-facebook text-2xl"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">
+            <i class="fab fa-instagram text-2xl"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">
+            <i class="fab fa-twitter text-2xl"></i>
+          </a>
+        </div>
+        <p class="text-gray-500 text-sm">&copy; 2025 بداية للتدخل المبكر والتأهيل. جميع الحقوق محفوظة</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Theme Toggle Button -->
+  <button id="themeToggle" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-indigo-600 hover:bg-indigo-700 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center justify-center">
+    <i id="themeIcon" class="fas fa-moon text-white text-xl"></i>
+  </button>
+  
+  <!-- Main JavaScript -->
+  <script>
+    // Toast Notifications System
+function showToast(message, type = 'success') {
+  const colors = {
+    success: 'linear-gradient(to right, #10b981, #059669)',
+    error: 'linear-gradient(to right, #ef4444, #dc2626)',
+    info: 'linear-gradient(to right, #3b82f6, #2563ed)',
+    warning: 'linear-gradient(to right, #f59e0b, #d97706)'
+  };
+  
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: "top",
+    position: "left",
+    backgroundColor: colors[type],
+    className: "rounded-xl shadow-lg",
+    stopOnFocus: true,
+    rtl: true
+  }).showToast();
+}
 
-    // ======================== Contact Form ========================
-    const contactForm = document.getElementById('contactForm');
-    const contactResponseMsg = document.getElementById('contactResponseMsg');
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = {
-        name: document.getElementById('cName').value.trim(),
-        email: document.getElementById('cEmail').value.trim(),
-        phone: document.getElementById('cPhone').value.trim(),
-        message: document.getElementById('cMessage').value.trim()
+// Dark Mode Management
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('darkMode');
+  const isDark = savedTheme === 'true';
+  
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+  } else {
+    document.documentElement.classList.remove('dark');
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('darkMode', isDark);
+  
+  if (isDark) {
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+    showToast('تم تفعيل الوضع الليلي', 'info');
+  } else {
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+    showToast('تم تفعيل الوضع النهاري', 'info');
+  }
+}
+
+themeToggle.addEventListener('click', toggleTheme);
+initTheme();
+
+// Mobile Menu Management
+const mobileMenuButton = document.getElementById('mobileMenuButton');
+const closeMobileMenu = document.getElementById('closeMobileMenu');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+function openMobileMenu() {
+  mobileMenu.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenuHandler() {
+  mobileMenu.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+mobileMenuButton.addEventListener('click', openMobileMenu);
+closeMobileMenu.addEventListener('click', closeMobileMenuHandler);
+mobileNavLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    closeMobileMenuHandler();
+  });
+});
+
+// Close mobile menu on escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+    closeMobileMenuHandler();
+  }
+});
+
+// Smooth scroll for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// Booking Form Handler
+const bookingForm = document.getElementById('bookingForm');
+const bookingSubmit = document.getElementById('bookingSubmit');
+
+bookingForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const bookingData = {
+    name: document.getElementById('bName').value.trim(),
+    phone: document.getElementById('bPhone').value.trim(),
+    date: document.getElementById('bDate').value,
+    time: document.getElementById('bTime').value
+  };
+  
+  // Validation
+  if (!bookingData.name || !bookingData.phone || !bookingData.date || !bookingData.time) {
+    showToast('يرجى ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  if (!/^[\d\s\-+()]+$/.test(bookingData.phone)) {
+    showToast('يرجى إدخال رقم هاتف صحيح', 'error');
+    return;
+  }
+  
+  // Show loading state
+  const originalText = bookingSubmit.innerHTML;
+  bookingSubmit.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري الحجز...';
+  bookingSubmit.disabled = true;
+  
+  try {
+    const res = await fetch('/api/booking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bookingData)
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok) {
+      showToast(data.message || 'تم حجز الموعد بنجاح!', 'success');
+      bookingForm.reset();
+    } else {
+      showToast(data.error || 'حدث خطأ أثناء الحجز', 'error');
+    }
+  } catch (error) {
+    showToast('تعذر الاتصال بالخادم. حاول مرة أخرى.', 'error');
+  } finally {
+    bookingSubmit.innerHTML = originalText;
+    bookingSubmit.disabled = false;
+  }
+});
+
+// Results Inquiry Handler
+const inquiryForm = document.getElementById('inquiryForm');
+const inquiryResponse = document.getElementById('inquiryResponse');
+const resultOptions = document.getElementById('resultOptions');
+const resultViewer = document.getElementById('resultViewer');
+const resultFrame = document.getElementById('resultFrame');
+const resultImage = document.getElementById('resultImage');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const downloadResult = document.getElementById('downloadResult');
+const viewResult = document.getElementById('viewResult');
+const closeResult = document.getElementById('closeResult');
+const inquirySubmit = document.getElementById('inquirySubmit');
+
+let currentResult = null;
+
+inquiryForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById('iPhone').value.trim();
+  
+  if (!phone) {
+    showToast('يرجى إدخال رقم التليفون', 'error');
+    return;
+  }
+  
+  // Show loading state
+  const originalText = inquirySubmit.innerHTML;
+  inquirySubmit.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري البحث...';
+  inquirySubmit.disabled = true;
+  
+  try {
+    inquiryResponse.classList.remove('hidden');
+    resultOptions.classList.add('hidden');
+    resultViewer.classList.add('hidden');
+    loadingSpinner.classList.remove('hidden');
+    
+    const res = await fetch(`/api/results/${phone}`);
+    const data = await res.json();
+    
+    if (data.success && data.results && data.results.length > 0) {
+      currentResult = data.results[0];
+      resultOptions.classList.remove('hidden');
+      resultViewer.classList.add('hidden');
+      showToast('تم العثور على النتيجة', 'success');
+    } else {
+      inquiryResponse.classList.add('hidden');
+      showToast(data.message || 'لا توجد نتائج لهذا الرقم', 'warning');
+    }
+  } catch (error) {
+    inquiryResponse.classList.add('hidden');
+    showToast('تعذر الاتصال بالخادم. حاول مرة أخرى.', 'error');
+  } finally {
+    inquirySubmit.innerHTML = originalText;
+    inquirySubmit.disabled = false;
+  }
+});
+
+downloadResult.addEventListener('click', () => {
+  if (currentResult && currentResult.fileUrl) {
+    const a = document.createElement('a');
+    a.href = currentResult.fileUrl;
+    a.download = `result_${currentResult.id || 'bedaya'}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('جاري تحميل النتيجة...', 'info');
+  }
+});
+
+viewResult.addEventListener('click', async () => {
+  if (!currentResult) return;
+  
+  resultOptions.classList.add('hidden');
+  resultViewer.classList.remove('hidden');
+  loadingSpinner.classList.remove('hidden');
+  resultFrame.classList.add('hidden');
+  resultImage.classList.add('hidden');
+  
+  try {
+    if (currentResult.fileUrl && currentResult.fileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+      resultImage.src = currentResult.fileUrl;
+      resultImage.onload = () => {
+        loadingSpinner.classList.add('hidden');
+        resultImage.classList.remove('hidden');
       };
-      try {
-        const res = await fetch('/api/message', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (res.ok) {
-          contactResponseMsg.innerHTML = '<span class="text-green-600">✅ تم إرسال رسالتك بنجاح</span>';
-          contactForm.reset();
-        } else {
-          contactResponseMsg.innerHTML = `<span class="text-red-600">❌ ${data.error}</span>`;
-        }
-      } catch {
-        contactResponseMsg.innerHTML = '<span class="text-red-600">⚠️ فشل الإرسال</span>';
-      }
-    });
+      resultImage.onerror = () => {
+        showAsPdf();
+      };
+    } else {
+      showAsPdf();
+    }
+  } catch (error) {
+    showToast('تعذر عرض النتيجة', 'error');
+  }
+});
 
-    // منع كليك يمين وأدوات المطور (حماية بسيطة)
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
-        e.preventDefault();
-      }
+function showAsPdf() {
+  if (currentResult && currentResult.fileUrl) {
+    const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(currentResult.fileUrl)}&embedded=true`;
+    resultFrame.src = viewerUrl;
+    resultFrame.onload = () => {
+      loadingSpinner.classList.add('hidden');
+      resultFrame.classList.remove('hidden');
+    };
+    resultFrame.onerror = () => {
+      loadingSpinner.classList.add('hidden');
+      showToast('تعذر عرض الملف، يرجى تحميله بدلاً من ذلك', 'warning');
+    };
+  }
+}
+
+closeResult.addEventListener('click', () => {
+  inquiryResponse.classList.add('hidden');
+  resultViewer.classList.add('hidden');
+  resultOptions.classList.remove('hidden');
+  currentResult = null;
+});
+
+// Contact Form Handler
+const contactForm = document.getElementById('contactForm');
+const contactSubmit = document.getElementById('contactSubmit');
+
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = {
+    name: document.getElementById('cName').value.trim(),
+    email: document.getElementById('cEmail').value.trim(),
+    phone: document.getElementById('cPhone').value.trim(),
+    message: document.getElementById('cMessage').value.trim()
+  };
+  
+  if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+    showToast('يرجى ملء جميع الحقول', 'error');
+    return;
+  }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    showToast('يرجى إدخال بريد إلكتروني صحيح', 'error');
+    return;
+  }
+  
+  if (formData.phone.length < 10) {
+    showToast('يرجى إدخال رقم هاتف صحيح', 'error');
+    return;
+  }
+  
+  // Show loading state
+  const originalText = contactSubmit.innerHTML;
+  contactSubmit.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري الإرسال...';
+  contactSubmit.disabled = true;
+  
+  try {
+    const submitRes = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone
+      })
     });
+    
+    const msgRes = await fetch('/api/message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message
+      })
+    });
+    
+    const msgData = await msgRes.json();
+    
+    if (msgRes.ok) {
+      showToast(msgData.message || 'تم إرسال رسالتك بنجاح!', 'success');
+      contactForm.reset();
+    } else {
+      showToast(msgData.error || 'حدث خطأ أثناء الإرسال', 'error');
+    }
+  } catch (error) {
+    showToast('تعذر الاتصال بالخادم. حاول مرة أخرى.', 'error');
+  } finally {
+    contactSubmit.innerHTML = originalText;
+    contactSubmit.disabled = false;
+  }
+});
+
+// Intersection Observer for animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.glass, .hover-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'all 0.6s ease-out';
+  observer.observe(el);
+});
   </script>
 </body>
 </html>
