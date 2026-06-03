@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم بداية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; transition: 0.3s; }
+    .dark { background: #0f172a; color: #f1f5f9; }
+    .dashboard-card { transition: all 0.3s ease; border-radius: 24px; }
+    .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.2); }
+    button { transition: 0.2s; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+    .dark th, .dark td { border-color: #334155; }
+    .edit-form { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 20px; margin-top: 10px; display: none; }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+  <div class="container mx-auto p-4 md:p-8">
+    <div class="flex justify-between items-center flex-wrap gap-4 mb-8">
+      <div class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" class="w-12 h-12 rounded-full shadow">
+        <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">لوحة تحكم بداية</h1>
+      </div>
+      <div class="flex gap-3">
+        <button id="darkModeDashboard" class="bg-indigo-600 text-white px-4 py-2 rounded-full"><i class="fas fa-moon"></i> الوضع الداكن</button>
+        <button id="logoutBtn" class="bg-red-500 text-white px-5 py-2 rounded-full hover:bg-red-600"><i class="fas fa-sign-out-alt"></i> خروج</button>
+      </div>
+    </div>
+
+    <!-- نظام المبيعات -->
+    <div class="dashboard-card bg-white dark:bg-gray-800 p-6 mb-8 shadow-lg">
+      <h2 class="text-2xl font-bold mb-4"><i class="fas fa-chart-line text-green-500"></i> نظام المبيعات</h2>
+      <div class="bg-indigo-100 dark:bg-indigo-900 p-4 rounded-xl mb-4 text-center"><span id="todayTotalSales">0</span> جنيه إجمالي مبيعات اليوم</div>
+      <form id="salesForm" class="flex flex-wrap gap-3 mb-4">
+        <input type="text" id="customerName" placeholder="اسم العميل" class="flex-1 p-2 rounded-xl border dark:bg-gray-700" required>
+        <input type="number" id="saleAmount" placeholder="المبلغ" class="w-32 p-2 rounded-xl border dark:bg-gray-700" required>
+        <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded-xl">تسجيل <i class="fas fa-plus"></i></button>
+        <button type="button" id="viewSalesBtn" class="bg-blue-600 text-white px-5 py-2 rounded-xl">عرض المبيعات</button>
+      </form>
+      <div id="salesList" class="hidden overflow-x-auto"></div>
+    </div>
+
+    <!-- المستخدمين والرسائل -->
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <div class="dashboard-card bg-white dark:bg-gray-800 p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-3"><i class="fas fa-users"></i> المستخدمون</h2>
+        <div id="usersContainer" class="overflow-x-auto text-sm"></div>
+      </div>
+      <div class="dashboard-card bg-white dark:bg-gray-800 p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-3"><i class="fas fa-calendar-alt"></i> الحجوزات</h2>
+        <div id="bookingsContainer" class="overflow-x-auto text-sm"></div>
+      </div>
+    </div>
+
+    <!-- النتائج -->
+    <div class="dashboard-card bg-white dark:bg-gray-800 p-6 mb-8 shadow-lg">
+      <h2 class="text-2xl font-bold mb-4"><i class="fas fa-file-alt"></i> رفع نتائج جديدة</h2>
+      <form id="uploadResultForm" class="flex flex-wrap gap-4 items-end mb-6">
+        <div class="flex-1"><label>رقم الهاتف</label><input type="tel" id="resultPhone" class="w-full p-2 rounded-xl border dark:bg-gray-700" required></div>
+        <div class="flex-1"><label>ملف النتيجة</label><input type="file" id="resultFile" class="w-full p-2 border rounded-xl dark:bg-gray-700" required></div>
+        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-xl"><i class="fas fa-upload"></i> رفع</button>
+      </form>
+      <div id="resultsContainer" class="overflow-x-auto"></div>
+    </div>
+
+    <!-- إرسال رسائل -->
+    <div class="dashboard-card bg-white dark:bg-gray-800 p-6 shadow-lg">
+      <h2 class="text-2xl font-bold mb-4"><i class="fas fa-paper-plane"></i> إرسال إشعار للمستخدم</h2>
+      <form id="adminMessageForm" class="flex flex-wrap gap-4 mb-6">
+        <input type="email" id="targetEmail" placeholder="البريد الإلكتروني" class="flex-1 p-2 rounded-xl border dark:bg-gray-700" required>
+        <textarea id="messageText" placeholder="محتوى الرسالة" rows="2" class="flex-1 p-2 rounded-xl border dark:bg-gray-700" required></textarea>
+        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-xl">إرسال <i class="fas fa-envelope"></i></button>
+      </form>
+      <div id="sentMessagesContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/admin-login.html';
+
+    // Dark mode
+    if (localStorage.getItem('dashboardDark') === 'true') document.body.classList.add('dark');
+    document.getElementById('darkModeDashboard').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('dashboardDark', document.body.classList.contains('dark'));
+    });
+
+    async function fetchWithAuth(url, options = {}) {
+      const res = await fetch(url, { ...options, headers: { ...options.headers, 'Authorization': `Bearer ${token}` } });
+      if (res.status === 401) { localStorage.removeItem('token'); window.location.href = '/admin-login.html'; }
+      return res;
+    }
+
+    // تحميل البيانات
+    async function loadUsers() {
+      const res = await fetchWithAuth('/api/admin/users');
+      const users = await res.json();
+      document.getElementById('usersContainer').innerHTML = `
+        <table class="w-full text-sm"><thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>الرسائل</th><th></th></tr></thead><tbody>
+        ${users.map(u => `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td><td class="max-w-xs truncate">${u.messages.substring(0,50)}</td><td><button onclick="deleteUser('${u.email}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button></td></tr>`).join('')}
+        </tbody></table>`;
+    }
+    async function loadBookings() {
+      const res = await fetchWithAuth('/api/admin/bookings');
+      const bookings = await res.json();
+      document.getElementById('bookingsContainer').innerHTML = `<table class="w-full text-sm"><thead><tr><th>الاسم</th><th>الهاتف</th><th>التاريخ</th><th>الوقت</th><th></th></tr></thead><tbody>${bookings.map(b => `<tr><td>${b.name}</td><td>${b.phone}</td><td>${b.date}</td><td>${b.time}</td><td><button onclick="deleteBooking('${b.phone}')" class="bg-red-500 text-white px-2 py-1 rounded">حذف</button></td></tr>`).join('')}</tbody></table>`;
+    }
+    async function loadResults() {
+      const res = await fetchWithAuth('/api/admin/results');
+      const results = await res.json();
+      document.getElementById('resultsContainer').innerHTML = `<table class="w-full"><thead><tr><th>رقم الهاتف</th><th>الملف</th><th>التاريخ</th><th></th></tr></thead><tbody>${results.map(r => `<tr><td>${r.phone}</td><td><a href="${r.fileUrl}" target="_blank" class="text-indigo-600">عرض</a></td><td>${new Date(r.uploadedAt).toLocaleDateString()}</td><td><button onclick="deleteResult('${r.phone}')" class="bg-red-500 px-2 py-1 rounded text-white">حذف</button></td></tr>`).join('')}</tbody></table>`;
+    }
+    async function loadSales() {
+      const res = await fetchWithAuth('/api/admin/sales/today');
+      const data = await res.json();
+      document.getElementById('todayTotalSales').innerHTML = data.todayTotal;
+      document.getElementById('salesList').innerHTML = `<table class="w-full mt-4"><thead><tr><th>العميل</th><th>المبلغ</th><th>الوقت</th><th></th></tr></thead><tbody>${data.sales.map(s => `<tr><td>${s.customerName}</td><td>${s.amount} ج</td><td>${new Date(s.saleTime).toLocaleTimeString()}</td><td><button onclick="deleteSale('${s.id}')" class="bg-red-500 px-2 py-1 rounded text-white">حذف</button></td></tr>`).join('')}</tbody></table>`;
+    }
+
+    window.deleteUser = async (email) => { if(confirm('حذف المستخدم؟')){ await fetchWithAuth(`/api/admin/user/${encodeURIComponent(email)}`, {method:'DELETE'}); loadUsers(); }};
+    window.deleteBooking = async (phone) => { if(confirm('حذف الحجز؟')){ await fetchWithAuth(`/api/admin/booking/${encodeURIComponent(phone)}`, {method:'DELETE'}); loadBookings(); }};
+    window.deleteResult = async (phone) => { if(confirm('حذف النتيجة؟')){ await fetchWithAuth(`/api/admin/result/${encodeURIComponent(phone)}`, {method:'DELETE'}); loadResults(); }};
+    window.deleteSale = async (id) => { if(confirm('حذف البيع؟')){ await fetchWithAuth(`/api/admin/sale/${id}`, {method:'DELETE'}); loadSales(); }};
+
+    document.getElementById('salesForm').addEventListener('submit', async(e) => {
+      e.preventDefault();
+      const customerName = document.getElementById('customerName').value;
+      const amount = document.getElementById('saleAmount').value;
+      await fetchWithAuth('/api/admin/sales', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({customerName, amount}) });
+      loadSales(); e.target.reset();
+    });
+    document.getElementById('uploadResultForm').addEventListener('submit', async(e) => {
+      e.preventDefault();
+      const fd = new FormData();
+      fd.append('phone', document.getElementById('resultPhone').value);
+      fd.append('resultFile', document.getElementById('resultFile').files[0]);
+      await fetchWithAuth('/api/upload-result', { method:'POST', body:fd });
+      loadResults(); e.target.reset();
+    });
+    document.getElementById('adminMessageForm').addEventListener('submit', async(e) => {
+      e.preventDefault();
+      const email = document.getElementById('targetEmail').value;
+      const message = document.getElementById('messageText').value;
+      await fetchWithAuth('/api/admin/message', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, message}) });
+      alert('تم الإرسال'); e.target.reset();
+    });
+    document.getElementById('viewSalesBtn').addEventListener('click', () => document.getElementById('salesList').classList.toggle('hidden'));
+    document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('token'); window.location.href='/admin-login.html'; });
+
+    loadUsers(); loadBookings(); loadResults(); loadSales();
+  </script>
+</body>
+</html>
