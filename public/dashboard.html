@@ -1,1439 +1,1107 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>لوحة التحكم | بداية</title>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          animation: {
-            'fade-in': 'fadeIn 0.5s ease-out',
-            'slide-up': 'slideUp 0.4s ease-out',
-            'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' },
-            },
-            slideUp: {
-              '0%': { opacity: '0', transform: 'translateY(20px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - بداية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      }
-    }
-  </script>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
 
-    body {
-      font-family: 'Cairo', 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-    }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
 
-    .dark body {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
+        /* Dark Mode */
+        body.dark-mode {
+            background: #1a1a2e;
+            color: #fff;
+        }
 
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #e2e8f0;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      border-radius: 10px;
-    }
-    .dark ::-webkit-scrollbar-track {
-      background: #1e293b;
-    }
+        body.dark-mode .sidebar,
+        body.dark-mode .content-card,
+        body.dark-mode table,
+        body.dark-mode .form-container {
+            background: #16213e;
+            color: #fff;
+        }
 
-    .sidebar {
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar-item {
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    
-    .sidebar-item:hover {
-      background: rgba(79, 70, 229, 0.1);
-      transform: translateX(-5px);
-    }
-    
-    .sidebar-item.active {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: white;
-    }
-    
-    .dark .sidebar-item.active {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    }
-    
-    .sidebar-item i {
-      width: 24px;
-    }
+        body.dark-mode table td,
+        body.dark-mode table th {
+            border-color: #2c3e66;
+        }
 
-    .stat-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
-    }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
 
-    .data-table tbody tr {
-      transition: all 0.2s ease;
-    }
-    .data-table tbody tr:hover {
-      background: rgba(79, 70, 229, 0.05);
-    }
-    .dark .data-table tbody tr:hover {
-      background: rgba(79, 70, 229, 0.1);
-    }
+        body.dark-mode .sidebar {
+            background: #16213e;
+        }
 
-    .btn-action {
-      transition: all 0.2s ease;
-    }
-    .btn-action:hover {
-      transform: translateY(-2px);
-    }
+        .sidebar-header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    .upload-zone {
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .upload-zone:hover {
-      border-color: #4f46e5;
-      background: rgba(79, 70, 229, 0.05);
-    }
+        .sidebar-header h2 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+             background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
 
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .loading-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid rgba(79, 70, 229, 0.3);
-      border-radius: 50%;
-      border-top-color: #4f46e5;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
 
-    .toast-message {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
-      animation: slideInRight 0.3s ease;
-    }
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
+        .menu-item {
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #4a5568;
+        }
 
-    .edit-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .edit-modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .edit-modal-content {
-      max-width: 500px;
-      width: 90%;
-      transform: scale(0.9);
-      transition: all 0.3s ease;
-    }
-    .edit-modal.active .edit-modal-content {
-      transform: scale(1);
-    }
+        body.dark-mode .menu-item {
+            color: #cbd5e0;
+        }
 
-    .search-input:focus {
-      transform: translateY(-2px);
-    }
+        .menu-item:hover,
+        .menu-item.active {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            color: #667eea;
+        }
 
-    .page-content {
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .menu-item i {
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 280px;
+            padding: 1rem;
+            transition: 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        body.dark-mode .top-bar {
+            background: #16213e;
+        }
+
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        body.dark-mode .stat-card {
+            background: #16213e;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-title {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #667eea;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #667eea;
+        }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        body.dark-mode table th {
+            background: #1e2a47;
+            color: #cbd5e0;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Drag & Drop Zone */
+        .drop-zone {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(102,126,234,0.1);
+            border-color: #764ba2;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            z-index: 2000;
+            animation: slideInLeft 0.3s ease;
+            display: none;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 1001;
+                background: #667eea;
+                color: white;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Loading Overlay -->
-  <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-spinner"></div>
-  </div>
-
-  <!-- Toast Container -->
-  <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
-
-  <!-- Edit Modal -->
-  <div id="editModal" class="edit-modal">
-    <div class="edit-modal-content bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6">
-      <h3 class="text-xl font-bold mb-4" id="editModalTitle">تعديل</h3>
-      <div id="editModalBody"></div>
-      <div class="flex gap-3 mt-6">
-        <button id="saveEditBtn" class="flex-1 bg-green-500 text-white py-2 rounded-lg">حفظ</button>
-        <button id="closeEditModal" class="flex-1 bg-gray-500 text-white py-2 rounded-lg">إلغاء</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex h-screen overflow-hidden">
-    <!-- ==================== SIDEBAR ==================== -->
-    <aside class="sidebar w-72 bg-white dark:bg-gray-800 shadow-2xl flex flex-col overflow-y-auto z-20">
-      <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <i class="fas fa-hand-sparkles text-white text-xl"></i>
-          </div>
-          <div>
-            <h1 class="text-xl font-bold text-gray-800 dark:text-white">مركز بداية</h1>
-            <p class="text-xs text-gray-500 dark:text-gray-400">لوحة التحكم</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="flex-1 py-6">
-        <div class="px-4 mb-4">
-          <button id="sidebarDarkToggle" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
-            <span class="flex items-center gap-3">
-              <i id="darkIcon" class="fas fa-moon text-gray-600 dark:text-gray-300"></i>
-              <span>الوضع الداكن</span>
-            </span>
-            <i class="fas fa-toggle-off text-gray-500 dark:hidden"></i>
-            <i class="fas fa-toggle-on text-indigo-500 hidden dark:inline"></i>
-          </button>
-        </div>
-        
-        <nav class="space-y-1 px-3">
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="dashboard">
-            <i class="fas fa-chart-pie w-5"></i>
-            <span>الرئيسية</span>
-          </div>
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="sales">
-            <i class="fas fa-chart-line w-5"></i>
-            <span>المبيعات</span>
-          </div>
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="users">
-            <i class="fas fa-users w-5"></i>
-            <span>المستخدمين</span>
-          </div>
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="bookings">
-            <i class="fas fa-calendar-check w-5"></i>
-            <span>الحجوزات</span>
-          </div>
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="results">
-            <i class="fas fa-file-alt w-5"></i>
-            <span>النتائج</span>
-          </div>
-          <div class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all" data-page="messages">
-            <i class="fas fa-envelope w-5"></i>
-            <span>الرسائل</span>
-          </div>
-        </nav>
-      </div>
-      
-      <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-        <button id="logoutBtnSidebar" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white transition-all">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>تسجيل خروج</span>
-        </button>
-      </div>
-    </aside>
-
-    <!-- ==================== MAIN CONTENT ==================== -->
-    <main class="flex-1 overflow-y-auto">
-      <!-- Header -->
-      <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm sticky top-0 z-10">
-        <div class="px-6 py-4 flex justify-between items-center">
-          <h2 id="pageTitle" class="text-2xl font-bold text-gray-800 dark:text-white">الرئيسية</h2>
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2">
-              <i class="fas fa-user-circle text-2xl text-gray-500 dark:text-gray-400"></i>
-              <span class="text-gray-700 dark:text-gray-300" id="adminName">أدمن</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="p-6" id="mainContent">
-        <!-- الصفحات سيتم تحميلها ديناميكياً هنا -->
-      </div>
-    </main>
-  </div>
-
-  <script>
-    // ==================== المتغيرات العامة ====================
-    let currentPage = 'dashboard';
-    let currentEditType = null;
-    let currentEditId = null;
-    let salesData = [];
-    let usersData = [];
-    let bookingsData = [];
-    let resultsData = [];
-    let messagesData = [];
-
-    // ==================== دوال مساعدة ====================
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast-message bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-3 flex items-center gap-3 border-r-4 ${type === 'success' ? 'border-green-500' : 'border-red-500'}`;
-      toast.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle text-green-500' : 'fa-exclamation-circle text-red-500'} text-xl"></i>
-        <span class="text-gray-700 dark:text-gray-300">${message}</span>
-      `;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    function showLoading() {
-      document.getElementById('loadingOverlay').classList.add('active');
-    }
-
-    function hideLoading() {
-      document.getElementById('loadingOverlay').classList.remove('active');
-    }
-
-    async function checkTokenValidity() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        redirectToLogin();
-        return false;
-      }
-      try {
-        const res = await fetch('/api/admin/verify-token', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error();
-        return true;
-      } catch (error) {
-        redirectToLogin();
-        return false;
-      }
-    }
-
-    function redirectToLogin() {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
-
-    // ==================== تحميل البيانات ====================
-    async function loadSales() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-      try {
-        const res = await fetch('/api/admin/sales/today', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        const { sales, todayTotal } = await res.json();
-        salesData = sales;
-        return { sales, todayTotal };
-      } catch (error) {
-        console.error('Error loading sales:', error);
-        return { sales: [], todayTotal: 0 };
-      }
-    }
-
-    async function loadUsers() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return [];
-      try {
-        const res = await fetch('/api/admin/users', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        usersData = await res.json();
-        return usersData;
-      } catch (error) {
-        console.error('Error loading users:', error);
-        return [];
-      }
-    }
-
-    async function loadBookings() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return [];
-      try {
-        const res = await fetch('/api/admin/bookings', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        bookingsData = await res.json();
-        return bookingsData;
-      } catch (error) {
-        console.error('Error loading bookings:', error);
-        return [];
-      }
-    }
-
-    async function loadResults() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return [];
-      try {
-        const res = await fetch('/api/admin/results', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        resultsData = await res.json();
-        return resultsData;
-      } catch (error) {
-        console.error('Error loading results:', error);
-        return [];
-      }
-    }
-
-    async function loadMessages() {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return [];
-      try {
-        const res = await fetch('/api/admin/messages', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (!res.ok) throw new Error();
-        messagesData = await res.json();
-        return messagesData;
-      } catch (error) {
-        console.error('Error loading messages:', error);
-        return [];
-      }
-    }
-
-    // ==================== دوال العرض ====================
-    function renderDashboardPage(salesTodayTotal, usersCount, bookingsCount, resultsCount) {
-      return `
-        <div class="page-content">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي المبيعات اليوم</p>
-                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${salesTodayTotal} <span class="text-sm">ج.م</span></p>
-                </div>
-                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
-                  <i class="fas fa-chart-line text-green-600 text-xl"></i>
-                </div>
-              </div>
-            </div>
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 dark:text-gray-400 text-sm">عدد المستخدمين</p>
-                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${usersCount}</p>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
-                  <i class="fas fa-users text-blue-600 text-xl"></i>
-                </div>
-              </div>
-            </div>
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 dark:text-gray-400 text-sm">عدد الحجوزات</p>
-                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${bookingsCount}</p>
-                </div>
-                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center">
-                  <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
-                </div>
-              </div>
-            </div>
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 dark:text-gray-400 text-sm">النتائج المرفوعة</p>
-                  <p class="text-3xl font-bold text-gray-800 dark:text-white mt-2">${resultsCount}</p>
-                </div>
-                <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
-                  <i class="fas fa-file-alt text-orange-600 text-xl"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-            <h3 class="text-lg font-bold mb-4">مرحباً بك في لوحة التحكم</h3>
-            <p class="text-gray-600 dark:text-gray-400">يمكنك التنقل بين الأقسام من القائمة الجانبية لإدارة المبيعات والمستخدمين والحجوزات والنتائج والرسائل.</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderSalesPage() {
-      return `
-        <div class="page-content">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                <i class="fas fa-chart-simple ml-2 text-indigo-500"></i> نظام المبيعات
-              </h2>
-            </div>
-            <div class="p-6">
-              <form id="salesForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <input type="text" id="customerName" placeholder="اسم العميل" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-                <input type="number" id="saleAmount" placeholder="المبلغ (ج.م)" class="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-                <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-                  <i class="fas fa-plus ml-2"></i> تسجيل بيع
-                </button>
-              </form>
-              
-              <div class="flex justify-between items-center mb-4">
-                <button id="viewSalesBtn" class="px-4 py-2 bg-green-500 text-white rounded-lg transition-all hover:bg-green-600">
-                  <i class="fas fa-list ml-2"></i> عرض سجلات المبيعات
-                </button>
-                <input type="text" id="searchSales" placeholder="بحث في المبيعات..." class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-64 search-input" />
-              </div>
-              
-              <div class="overflow-x-auto">
-                <table id="salesTable" class="data-table w-full hidden">
-                  <thead class="bg-indigo-50 dark:bg-indigo-900/30">
-                    <tr>
-                      <th class="px-4 py-3 text-right">اسم العميل</th>
-                      <th class="px-4 py-3 text-right">المبلغ</th>
-                      <th class="px-4 py-3 text-right">وقت البيع</th>
-                      <th class="px-4 py-3 text-right">الإجراءات</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderUsersPage() {
-      return `
-        <div class="page-content">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                <i class="fas fa-users ml-2 text-blue-500"></i> المستخدمين
-              </h2>
-            </div>
-            <div class="p-6">
-              <input type="text" id="searchUsers" placeholder="بحث في المستخدمين..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-              <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                <table id="usersTable" class="data-table w-full">
-                  <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
-                    <tr>
-                      <th class="px-3 py-2 text-right">الاسم</th>
-                      <th class="px-3 py-2 text-right">البريد</th>
-                      <th class="px-3 py-2 text-right">الهاتف</th>
-                      <th class="px-3 py-2 text-right">الرسائل</th>
-                      <th class="px-3 py-2 text-right">الإجراءات</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderBookingsPage() {
-      return `
-        <div class="page-content">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                <i class="fas fa-calendar-check ml-2 text-purple-500"></i> الحجوزات
-              </h2>
-            </div>
-            <div class="p-6">
-              <input type="text" id="searchBookings" placeholder="بحث في الحجوزات..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-              <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                <table id="bookingsTable" class="data-table w-full">
-                  <thead class="bg-purple-50 dark:bg-purple-900/30 sticky top-0">
-                    <tr>
-                      <th class="px-3 py-2 text-right">الاسم</th>
-                      <th class="px-3 py-2 text-right">الهاتف</th>
-                      <th class="px-3 py-2 text-right">التاريخ</th>
-                      <th class="px-3 py-2 text-right">الوقت</th>
-                      <th class="px-3 py-2 text-right">حذف</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderResultsPage() {
-      return `
-        <div class="page-content">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg mb-8">
-            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                <i class="fas fa-file-alt ml-2 text-orange-500"></i> النتائج المرفوعة
-              </h2>
-            </div>
-            <div class="p-6">
-              <input type="text" id="searchResults" placeholder="بحث في النتائج..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 search-input" />
-              <div class="overflow-x-auto">
-                <table id="resultsTable" class="data-table w-full">
-                  <thead class="bg-orange-50 dark:bg-orange-900/30">
-                    <tr>
-                      <th class="px-4 py-3 text-right">رقم التليفون</th>
-                      <th class="px-4 py-3 text-right">النتيجة</th>
-                      <th class="px-4 py-3 text-right">تاريخ الرفع</th>
-                      <th class="px-4 py-3 text-right">الإجراءات</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-            <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-              <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                <i class="fas fa-upload ml-2 text-green-500"></i> رفع نتائج جديدة
-              </h2>
-            </div>
-            <div class="p-6">
-              <form id="uploadResultForm" class="space-y-4">
-                <input type="tel" id="resultPhone" placeholder="رقم هاتف العميل" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-                
-                <div class="upload-zone border-2 border-dashed border-indigo-300 dark:border-indigo-700 rounded-xl p-8 text-center">
-                  <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400 mb-3"></i>
-                  <p class="text-gray-600 dark:text-gray-400">اسحب وأسقط ملف النتيجة هنا أو</p>
-                  <input type="file" id="resultFile" class="mt-3 text-center mx-auto block" required />
-                </div>
-                
-                <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-                  <i class="fas fa-cloud-upload-alt ml-2"></i> رفع النتيجة
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderMessagesPage() {
-      return `
-        <div class="page-content">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-              <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                  <i class="fas fa-paper-plane ml-2 text-indigo-500"></i> إرسال رسالة
-                </h2>
-              </div>
-              <div class="p-6">
-                <form id="messageForm" class="space-y-4">
-                  <input type="email" id="emailInput" placeholder="البريد الإلكتروني للمستخدم" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required />
-                  <textarea id="messageInput" rows="4" placeholder="نص الرسالة..." class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-indigo-500 transition-all" required></textarea>
-                  <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-3 rounded-xl font-semibold transition-all hover:scale-105">
-                    <i class="fas fa-paper-plane ml-2"></i> إرسال
-                  </button>
-                </form>
-              </div>
-            </div>
-            
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-              <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-                  <i class="fas fa-envelope ml-2 text-blue-500"></i> الرسائل المرسلة
-                </h2>
-              </div>
-              <div class="p-6">
-                <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                  <table id="sentMessagesTable" class="data-table w-full">
-                    <thead class="bg-blue-50 dark:bg-blue-900/30 sticky top-0">
-                      <tr>
-                        <th class="px-3 py-2 text-right">البريد</th>
-                        <th class="px-3 py-2 text-right">الرسالة</th>
-                        <th class="px-3 py-2 text-right">التاريخ</th>
-                        <th class="px-3 py-2 text-right">حذف</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderUsersTable() {
-      const tbody = document.querySelector('#usersTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      usersData.forEach(user => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.name || '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${user.email || '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.phone || '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${user.messages || 'لا توجد رسائل'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteUser('${encodeURIComponent(user.email)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderBookingsTable() {
-      const tbody = document.querySelector('#bookingsTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      bookingsData.forEach(booking => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.name}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.phone}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.date}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.time}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteBooking('${encodeURIComponent(booking.phone)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderResultsTable() {
-      const tbody = document.querySelector('#resultsTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      resultsData.forEach(result => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${result.phone}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <a href="${result.fileUrl}" target="_blank" class="text-indigo-500 hover:underline">
-              <i class="fas fa-eye ml-1"></i> عرض
-            </a>
-          </td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(result.uploadedAt).toLocaleString('ar-EG')}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editResult('${encodeURIComponent(result.phone)}')">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteResult('${encodeURIComponent(result.phone)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderSalesTable(data) {
-      const tbody = document.querySelector('#salesTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      data.forEach(sale => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${sale.customerName}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${sale.amount} ج.م</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(sale.saleTime).toLocaleString('ar-EG')}</td>
-          <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <button class="btn-action bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editSale('${sale.id}')">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn-action bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteSale('${sale.id}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderMessagesTable() {
-      const tbody = document.querySelector('#sentMessagesTable tbody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      messagesData.forEach((msg, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${msg.email || '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${msg.message || '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${msg.sentAt ? new Date(msg.sentAt).toLocaleString('ar-EG') : '-'}</td>
-          <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-            <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteMessage('${msg.id}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // ==================== دوال الحذف والتعديل ====================
-    window.editSale = (id) => {
-      const sale = salesData.find(s => s.id == id);
-      if (!sale) return;
-      currentEditType = 'sale';
-      currentEditId = id;
-      document.getElementById('editModalTitle').textContent = 'تعديل عملية البيع';
-      document.getElementById('editModalBody').innerHTML = `
-        <input type="text" id="editName" value="${sale.customerName}" class="w-full px-4 py-2 border rounded-lg mb-3" placeholder="اسم العميل">
-        <input type="number" id="editAmount" value="${sale.amount}" class="w-full px-4 py-2 border rounded-lg" placeholder="المبلغ">
-      `;
-      document.getElementById('editModal').classList.add('active');
-    };
-
-    window.deleteSale = async (id) => {
-      if (!confirm('هل أنت متأكد من حذف هذه العملية؟')) return;
-      showLoading();
-      try {
-        const res = await fetch(`/api/admin/sale/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (res.ok) {
-          showToast('تم الحذف بنجاح');
-          await refreshCurrentPage();
-        } else {
-          showToast('حدث خطأ أثناء الحذف', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    };
-
-    window.deleteUser = async (email) => {
-      if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
-      showLoading();
-      try {
-        const res = await fetch(`/api/admin/user/${email}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (res.ok) {
-          showToast('تم الحذف بنجاح');
-          await refreshCurrentPage();
-        } else {
-          showToast('حدث خطأ أثناء الحذف', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    };
-
-    window.deleteBooking = async (phone) => {
-      if (!confirm('هل أنت متأكد من حذف هذا الحجز؟')) return;
-      showLoading();
-      try {
-        const res = await fetch(`/api/admin/booking/${phone}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (res.ok) {
-          showToast('تم الحذف بنجاح');
-          await refreshCurrentPage();
-        } else {
-          showToast('حدث خطأ أثناء الحذف', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    };
-
-    window.deleteResult = async (phone) => {
-      if (!confirm('هل أنت متأكد من حذف هذه النتيجة؟')) return;
-      showLoading();
-      try {
-        const res = await fetch(`/api/admin/result/${phone}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (res.ok) {
-          showToast('تم الحذف بنجاح');
-          await refreshCurrentPage();
-        } else {
-          showToast('حدث خطأ أثناء الحذف', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    };
-
-    window.deleteMessage = async (id) => {
-      if (!confirm('هل أنت متأكد من حذف هذه الرسالة؟')) return;
-      showLoading();
-      try {
-        const res = await fetch(`/api/admin/message/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        if (res.ok) {
-          showToast('تم الحذف بنجاح');
-          await refreshCurrentPage();
-        } else {
-          showToast('حدث خطأ أثناء الحذف', 'error');
-        }
-      } catch (error) {
-        showToast('خطأ في الاتصال', 'error');
-      }
-      hideLoading();
-    };
-
-    window.editResult = (phone) => {
-      currentEditType = 'result';
-      currentEditId = decodeURIComponent(phone);
-      document.getElementById('editModalTitle').textContent = 'تعديل النتيجة';
-      document.getElementById('editModalBody').innerHTML = `
-        <input type="tel" id="editPhone" value="${decodeURIComponent(phone)}" class="w-full px-4 py-2 border rounded-lg mb-3" placeholder="رقم الهاتف">
-        <input type="file" id="editFile" class="w-full px-4 py-2 border rounded-lg">
-        <p class="text-sm text-gray-500 mt-2">اترك الحقل فارغاً إذا لم ترد تغيير الملف</p>
-      `;
-      document.getElementById('editModal').classList.add('active');
-    };
-
-    // ==================== تحديث الصفحة الحالية ====================
-    async function refreshCurrentPage() {
-      await loadAllData();
-      
-      if (currentPage === 'dashboard') {
-        const salesResult = await loadSales();
-        document.getElementById('mainContent').innerHTML = renderDashboardPage(
-          salesResult.todayTotal, 
-          usersData.length, 
-          bookingsData.length, 
-          resultsData.length
-        );
-      } else if (currentPage === 'sales') {
-        document.getElementById('mainContent').innerHTML = renderSalesPage();
-        await loadSales();
-        renderSalesTable(salesData);
-        attachSalesEvents();
-      } else if (currentPage === 'users') {
-        document.getElementById('mainContent').innerHTML = renderUsersPage();
-        renderUsersTable();
-        attachUsersEvents();
-      } else if (currentPage === 'bookings') {
-        document.getElementById('mainContent').innerHTML = renderBookingsPage();
-        renderBookingsTable();
-        attachBookingsEvents();
-      } else if (currentPage === 'results') {
-        document.getElementById('mainContent').innerHTML = renderResultsPage();
-        renderResultsTable();
-        attachResultsEvents();
-      } else if (currentPage === 'messages') {
-        document.getElementById('mainContent').innerHTML = renderMessagesPage();
-        renderMessagesTable();
-        attachMessagesEvents();
-      }
-    }
-
-    async function loadAllData() {
-      await Promise.all([
-        loadSales(),
-        loadUsers(),
-        loadBookings(),
-        loadResults(),
-        loadMessages()
-      ]);
-    }
-
-    // ==================== إرفاق الأحداث ====================
-    function attachSalesEvents() {
-      const salesForm = document.getElementById('salesForm');
-      if (salesForm) {
-        salesForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const customerName = document.getElementById('customerName').value.trim();
-          const amount = document.getElementById('saleAmount').value.trim();
-          if (!customerName || !amount) {
-            showToast('يرجى إدخال جميع البيانات', 'error');
-            return;
-          }
-          showLoading();
-          try {
-            const res = await fetch('/api/admin/sales', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-              },
-              body: JSON.stringify({ customerName, amount: parseFloat(amount) })
-            });
-            const data = await res.json();
-            if (res.ok) {
-              showToast(data.message);
-              document.getElementById('salesForm').reset();
-              await refreshCurrentPage();
-            } else {
-              showToast(data.error || 'حدث خطأ', 'error');
-            }
-          } catch (error) {
-            showToast('خطأ في الاتصال', 'error');
-          }
-          hideLoading();
-        });
-      }
-
-      const viewSalesBtn = document.getElementById('viewSalesBtn');
-      let salesTableVisible = false;
-      if (viewSalesBtn) {
-        viewSalesBtn.addEventListener('click', () => {
-          const table = document.getElementById('salesTable');
-          salesTableVisible = !salesTableVisible;
-          table.style.display = salesTableVisible ? 'table' : 'none';
-          viewSalesBtn.innerHTML = salesTableVisible ? '<i class="fas fa-eye-slash ml-2"></i> إخفاء السجلات' : '<i class="fas fa-list ml-2"></i> عرض سجلات المبيعات';
-        });
-      }
-
-      const searchSales = document.getElementById('searchSales');
-      if (searchSales) {
-        searchSales.addEventListener('input', (e) => {
-          const term = e.target.value.toLowerCase();
-          const filtered = salesData.filter(s => s.customerName.toLowerCase().includes(term));
-          renderSalesTable(filtered);
-        });
-      }
-    }
-
-    function attachUsersEvents() {
-      const searchUsers = document.getElementById('searchUsers');
-      if (searchUsers) {
-        searchUsers.addEventListener('input', (e) => {
-          const term = e.target.value.toLowerCase();
-          const filtered = usersData.filter(u => 
-            (u.name && u.name.toLowerCase().includes(term)) || 
-            (u.email && u.email.toLowerCase().includes(term))
-          );
-          const tbody = document.querySelector('#usersTable tbody');
-          if (!tbody) return;
-          tbody.innerHTML = '';
-          filtered.forEach(user => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.name || '-'}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-sm">${user.email || '-'}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${user.phone || '-'}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 max-w-xs truncate">${user.messages || 'لا توجد رسائل'}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteUser('${encodeURIComponent(user.email)}')">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-        });
-      }
-    }
-
-    function attachBookingsEvents() {
-      const searchBookings = document.getElementById('searchBookings');
-      if (searchBookings) {
-        searchBookings.addEventListener('input', (e) => {
-          const term = e.target.value.toLowerCase();
-          const filtered = bookingsData.filter(b => 
-            b.name.toLowerCase().includes(term) || 
-            b.phone.includes(term)
-          );
-          const tbody = document.querySelector('#bookingsTable tbody');
-          if (!tbody) return;
-          tbody.innerHTML = '';
-          filtered.forEach(booking => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.name}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.phone}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.date}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">${booking.time}</td>
-              <td class="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                <button class="bg-red-500 text-white px-2 py-1 rounded text-sm" onclick="deleteBooking('${encodeURIComponent(booking.phone)}')">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-        });
-      }
-    }
-
-    function attachResultsEvents() {
-      const uploadForm = document.getElementById('uploadResultForm');
-      if (uploadForm) {
-        uploadForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const phone = document.getElementById('resultPhone').value.trim();
-          const file = document.getElementById('resultFile').files[0];
-          if (!phone || !file) {
-            showToast('يرجى إدخال رقم الهاتف واختيار ملف', 'error');
-            return;
-          }
-          showLoading();
-          const formData = new FormData();
-          formData.append('phone', phone);
-          formData.append('resultFile', file);
-          try {
-            const res = await fetch('/api/upload-result', {
-              method: 'POST',
-              headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-              body: formData
-            });
-            const data = await res.json();
-            if (res.ok) {
-              showToast(data.message);
-              document.getElementById('uploadResultForm').reset();
-              await refreshCurrentPage();
-            } else {
-              showToast(data.error || 'حدث خطأ', 'error');
-            }
-          } catch (error) {
-            showToast('خطأ في الاتصال', 'error');
-          }
-          hideLoading();
-        });
-      }
-
-      const searchResults = document.getElementById('searchResults');
-      if (searchResults) {
-        searchResults.addEventListener('input', (e) => {
-          const term = e.target.value.toLowerCase();
-          const filtered = resultsData.filter(r => r.phone.includes(term));
-          const tbody = document.querySelector('#resultsTable tbody');
-          if (!tbody) return;
-          tbody.innerHTML = '';
-          filtered.forEach(result => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${result.phone}</td>
-              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <a href="${result.fileUrl}" target="_blank" class="text-indigo-500 hover:underline">
-                  <i class="fas fa-eye ml-1"></i> عرض
-                </a>
-              </td>
-              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">${new Date(result.uploadedAt).toLocaleString('ar-EG')}</td>
-              <td class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <button class="bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm ml-2" onclick="editResult('${encodeURIComponent(result.phone)}')">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm" onclick="deleteResult('${encodeURIComponent(result.phone)}')">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-        });
-      }
-    }
-
-    function attachMessagesEvents() {
-      const messageForm = document.getElementById('messageForm');
-      if (messageForm) {
-        messageForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const email = document.getElementById('emailInput').value.trim();
-          const message = document.getElementById('messageInput').value.trim();
-          if (!email || !message) {
-            showToast('يرجى إدخال البريد الإلكتروني والرسالة', 'error');
-            return;
-          }
-          showLoading();
-          try {
-            const res = await fetch('/api/admin/message', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-              },
-              body: JSON.stringify({ email, message })
-            });
-            const data = await res.json();
-            if (res.ok) {
-              showToast(data.message);
-              document.getElementById('messageForm').reset();
-              await refreshCurrentPage();
-            } else {
-              showToast(data.error || 'حدث خطأ', 'error');
-            }
-          } catch (error) {
-            showToast('خطأ في الاتصال', 'error');
-          }
-          hideLoading();
-        });
-      }
-    }
-
-    // ==================== تبديل الصفحات ====================
-    async function switchToPage(page) {
-      currentPage = page;
-      
-      // تحديث الـ active في القائمة
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        if (item.dataset.page === page) {
-          item.classList.add('active');
-        } else {
-          item.classList.remove('active');
-        }
-      });
-      
-      // تحديث عنوان الصفحة
-      const titles = {
-        dashboard: 'الرئيسية',
-        sales: 'المبيعات',
-        users: 'المستخدمين',
-        bookings: 'الحجوزات',
-        results: 'النتائج',
-        messages: 'الرسائل'
-      };
-      document.getElementById('pageTitle').textContent = titles[page] || 'لوحة التحكم';
-      
-      showLoading();
-      
-      await loadAllData();
-      
-      if (page === 'dashboard') {
-        const salesResult = await loadSales();
-        document.getElementById('mainContent').innerHTML = renderDashboardPage(
-          salesResult.todayTotal, 
-          usersData.length, 
-          bookingsData.length, 
-          resultsData.length
-        );
-      } else if (page === 'sales') {
-        document.getElementById('mainContent').innerHTML = renderSalesPage();
-        renderSalesTable(salesData);
-        attachSalesEvents();
-      } else if (page === 'users') {
-        document.getElementById('mainContent').innerHTML = renderUsersPage();
-        renderUsersTable();
-        attachUsersEvents();
-      } else if (page === 'bookings') {
-        document.getElementById('mainContent').innerHTML = renderBookingsPage();
-        renderBookingsTable();
-        attachBookingsEvents();
-      } else if (page === 'results') {
-        document.getElementById('mainContent').innerHTML = renderResultsPage();
-        renderResultsTable();
-        attachResultsEvents();
-      } else if (page === 'messages') {
-        document.getElementById('mainContent').innerHTML = renderMessagesPage();
-        renderMessagesTable();
-        attachMessagesEvents();
-      }
-      
-      hideLoading();
-    }
-
-    // ==================== حفظ التعديل ====================
-    document.getElementById('saveEditBtn').addEventListener('click', async () => {
-      if (currentEditType === 'sale') {
-        const newName = document.getElementById('editName').value.trim();
-        const newAmount = document.getElementById('editAmount').value.trim();
-        if (!newName || !newAmount) {
-          showToast('يرجى إدخال جميع البيانات', 'error');
-          return;
-        }
-        showLoading();
-        try {
-          const res = await fetch(`/api/admin/sale/${currentEditId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({ customerName: newName, amount: parseFloat(newAmount) })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            showToast(data.message);
-            await refreshCurrentPage();
-            document.getElementById('editModal').classList.remove('active');
-          } else {
-            showToast(data.error || 'حدث خطأ', 'error');
-          }
-        } catch (error) {
-          showToast('خطأ في الاتصال', 'error');
-        }
-        hideLoading();
-      } else if (currentEditType === 'result') {
-        const newPhone = document.getElementById('editPhone').value.trim();
-        const file = document.getElementById('editFile').files[0];
-        if (!newPhone) {
-          showToast('يرجى إدخال رقم الهاتف', 'error');
-          return;
-        }
-        showLoading();
-        const formData = new FormData();
-        formData.append('phone', newPhone);
-        if (file) formData.append('resultFile', file);
-        try {
-          const res = await fetch(`/api/admin/result/${encodeURIComponent(currentEditId)}`, {
-            method: 'PUT',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-            body: formData
-          });
-          const data = await res.json();
-          if (res.ok) {
-            showToast(data.message);
-            await refreshCurrentPage();
-            document.getElementById('editModal').classList.remove('active');
-          } else {
-            showToast(data.error || 'حدث خطأ', 'error');
-          }
-        } catch (error) {
-          showToast('خطأ في الاتصال', 'error');
-        }
-        hideLoading();
-      }
-    });
-
-    document.getElementById('closeEditModal').addEventListener('click', () => {
-      document.getElementById('editModal').classList.remove('active');
-    });
-
-    // ==================== تسجيل الخروج ====================
-    async function logout() {
-      if (!confirm('هل أنت متأكد من تسجيل الخروج؟')) return;
-      try {
-        await fetch('/api/admin/logout', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-      } catch (error) {}
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
+    <button class="menu-toggle" onclick="toggleSidebar()" style="display: none;">☰</button>
     
-    document.getElementById('logoutBtnSidebar').addEventListener('click', logout);
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>بداية</h2>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" data-section="home">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>الرئيسية</span>
+            </div>
+            <div class="menu-item" data-section="sales">
+                <i class="fas fa-chart-line"></i>
+                <span>المبيعات</span>
+            </div>
+            <div class="menu-item" data-section="contacts">
+                <i class="fas fa-envelope"></i>
+                <span>التواصل</span>
+            </div>
+            <div class="menu-item" data-section="bookings">
+                <i class="fas fa-calendar"></i>
+                <span>الحجوزات</span>
+            </div>
+            <div class="menu-item" data-section="results">
+                <i class="fas fa-file-upload"></i>
+                <span>النتائج</span>
+            </div>
+            <div class="menu-item" data-section="emails">
+                <i class="fas fa-paper-plane"></i>
+                <span>الرسائل</span>
+            </div>
+        </div>
+    </div>
 
-    // ==================== الوضع الداكن ====================
-    function initDarkMode() {
-      const sidebarDarkToggle = document.getElementById('sidebarDarkToggle');
-      const darkIcon = document.getElementById('darkIcon');
-      
-      if (localStorage.getItem('adminDarkMode') === 'true') {
-        document.documentElement.classList.add('dark');
-        if (darkIcon) {
-          darkIcon.classList.remove('fa-moon');
-          darkIcon.classList.add('fa-sun');
+    <div class="main-content">
+        <div class="top-bar">
+            <h3 id="sectionTitle">الرئيسية</h3>
+            <div>
+                <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+                <button class="logout-btn" onclick="logout()">تسجيل خروج <i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <!-- Home Section -->
+        <div id="homeSection" class="content-section active">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-title">إجمالي المبيعات اليوم</div>
+                    <div class="stat-value" id="todaySales">0 ج.م</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">عدد المستخدمين</div>
+                    <div class="stat-value" id="totalUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">عدد الحجوزات</div>
+                    <div class="stat-value" id="totalBookings">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">النتائج المرفوعة</div>
+                    <div class="stat-value" id="totalResults">0</div>
+                </div>
+            </div>
+            <div class="content-card">
+                <canvas id="salesChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+
+        <!-- Sales Section -->
+        <div id="salesSection" class="content-section">
+            <div class="content-card">
+                <h3 class="card-title">نظام المبيعات</h3>
+                <div class="form-container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="customerName" placeholder="اسم العميل">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="saleAmount" placeholder="المبلغ (ج.م)">
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="addSale()">تسجيل بيع</button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="salesSearch" placeholder="بحث في المبيعات..." onkeyup="loadSales(1)">
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>اسم العميل</th><th>المبلغ</th><th>التاريخ</th><th>الإجراءات</th></tr>
+                        </thead>
+                        <tbody id="salesTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="salesPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Contacts Section -->
+        <div id="contactsSection" class="content-section">
+            <div class="content-card">
+                <h3 class="card-title">التواصل</h3>
+                <div class="search-bar">
+                    <input type="text" id="contactsSearch" placeholder="بحث في التواصل..." onkeyup="loadContacts(1)">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>الرسالة</th><th>الإجراءات</th></tr></thead>
+                        <tbody id="contactsTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="contactsPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Bookings Section -->
+        <div id="bookingsSection" class="content-section">
+            <div class="content-card">
+                <h3 class="card-title">الحجوزات</h3>
+                <div class="search-bar">
+                    <input type="text" id="bookingsSearch" placeholder="بحث في الحجوزات..." onkeyup="loadBookings(1)">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>الاسم</th><th>الهاتف</th><th>التاريخ</th><th>الوقت</th><th>الإجراءات</th></tr></thead>
+                        <tbody id="bookingsTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="bookingsPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="content-section">
+            <div class="content-card">
+                <h3 class="card-title">النتائج المرفوعة</h3>
+                <div class="form-container">
+                    <div class="form-group">
+                        <input type="text" id="phoneNumber" placeholder="رقم هاتف العميل">
+                    </div>
+                    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #667eea;"></i>
+                        <p>اسحب وأسقط ملف النتيجة هنا أو اختر ملف</p>
+                        <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(this.files[0])">
+                    </div>
+                    <button class="btn-primary" onclick="uploadResult()">رفع النتيجة</button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="resultsSearch" placeholder="بحث في النتائج..." onkeyup="loadResults(1)">
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>رقم التليفون</th><th>النتيجة</th><th>تاريخ الرفع</th><th>الإجراءات</th></tr></thead>
+                        <tbody id="resultsTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="resultsPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Emails Section -->
+        <div id="emailsSection" class="content-section">
+            <div class="content-card">
+                <h3 class="card-title">إرسال رسالة</h3>
+                <div class="form-container">
+                    <div class="form-group">
+                        <input type="email" id="userEmail" placeholder="البريد الإلكتروني للمستخدم">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="emailMessage" rows="5" placeholder="نص الرسالة"></textarea>
+                    </div>
+                    <button class="btn-primary" onclick="sendEmail()">إرسال</button>
+                </div>
+                
+                <h3 class="card-title" style="margin-top: 2rem;">الرسائل المرسلة</h3>
+                <div class="search-bar">
+                    <input type="text" id="emailsSearch" placeholder="بحث في الرسائل..." onkeyup="loadEmails(1)">
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>البريد</th><th>الرسالة</th><th>التاريخ</th><th>حذف</th></tr></thead>
+                        <tbody id="emailsTableBody"></tbody>
+                    </table>
+                </div>
+                <div id="emailsPagination" class="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let token = localStorage.getItem('token');
+        let currentPage = { sales: 1, contacts: 1, bookings: 1, results: 1, emails: 1 };
+        let salesChart = null;
+
+        // Check authentication
+        if (!token) {
+            window.location.href = 'login.html';
         }
-      }
-      
-      if (sidebarDarkToggle) {
-        sidebarDarkToggle.addEventListener('click', () => {
-          document.documentElement.classList.toggle('dark');
-          const isDark = document.documentElement.classList.contains('dark');
-          localStorage.setItem('adminDarkMode', isDark);
-          if (darkIcon) {
-            if (isDark) {
-              darkIcon.classList.remove('fa-moon');
-              darkIcon.classList.add('fa-sun');
-            } else {
-              darkIcon.classList.remove('fa-sun');
-              darkIcon.classList.add('fa-moon');
-            }
-          }
-        });
-      }
-    }
 
-    // ==================== التحميل الأولي ====================
-    document.addEventListener('DOMContentLoaded', async () => {
-      const isValid = await checkTokenValidity();
-      if (!isValid) return;
-      
-      initDarkMode();
-      
-      // إضافة مستمعي الأحداث للقائمة
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.addEventListener('click', () => {
-          switchToPage(item.dataset.page);
+        // Show toast message
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.backgroundColor = isError ? 'rgba(220, 38, 38, 0.9)' : 'rgba(0,0,0,0.9)';
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // API request helper
+        async function apiRequest(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    ...options.headers
+                }
+            });
+            
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+                return null;
+            }
+            
+            return await response.json();
+        }
+
+        // Load stats and chart
+        async function loadStats() {
+            const data = await apiRequest('/api/stats');
+            if (data) {
+                document.getElementById('todaySales').innerHTML = `${data.todaySales} ج.م`;
+                document.getElementById('totalUsers').innerHTML = data.totalUsers;
+                document.getElementById('totalBookings').innerHTML = data.totalBookings;
+                document.getElementById('totalResults').innerHTML = data.totalResults;
+                updateChart();
+            }
+        }
+
+        // Update chart
+        async function updateChart() {
+            const data = await apiRequest('/api/sales?limit=100');
+            if (data && data.sales) {
+                const last7Days = [];
+                const amounts = [];
+                const today = new Date();
+                
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    last7Days.push(date.toLocaleDateString('ar'));
+                    
+                    const daySales = data.sales.filter(sale => {
+                        const saleDate = new Date(sale.date);
+                        return saleDate.toDateString() === date.toDateString();
+                    });
+                    amounts.push(daySales.reduce((sum, sale) => sum + sale.amount, 0));
+                }
+                
+                if (salesChart) salesChart.destroy();
+                
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                salesChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: last7Days,
+                        datasets: [{
+                            label: 'المبيعات (ج.م)',
+                            data: amounts,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102,126,234,0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                rtl: true
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Sales functions
+        async function addSale() {
+            const customerName = document.getElementById('customerName').value;
+            const amount = document.getElementById('saleAmount').value;
+            
+            if (!customerName || !amount) {
+                showToast('الرجاء ملء جميع الحقول', true);
+                return;
+            }
+            
+            const result = await apiRequest('/api/sales', {
+                method: 'POST',
+                body: JSON.stringify({ customerName, amount })
+            });
+            
+            if (result && result.success) {
+                showToast('تم تسجيل البيع بنجاح');
+                document.getElementById('customerName').value = '';
+                document.getElementById('saleAmount').value = '';
+                loadSales(1);
+                loadStats();
+            } else {
+                showToast(result?.error || 'حدث خطأ', true);
+            }
+        }
+        
+        async function loadSales(page) {
+            currentPage.sales = page;
+            const search = document.getElementById('salesSearch')?.value || '';
+            const data = await apiRequest(`/api/sales?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
+            
+            if (data) {
+                const tbody = document.getElementById('salesTableBody');
+                tbody.innerHTML = '';
+                data.sales.forEach(sale => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = sale.customerName;
+                    row.insertCell(1).textContent = `${sale.amount} ج.م`;
+                    row.insertCell(2).textContent = new Date(sale.date).toLocaleDateString('ar');
+                    const deleteCell = row.insertCell(3);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'حذف';
+                    deleteBtn.className = 'btn-danger';
+                    deleteBtn.onclick = () => deleteSale(sale.id);
+                    deleteCell.appendChild(deleteBtn);
+                });
+                
+                renderPagination('salesPagination', data.page, data.totalPages, loadSales);
+            }
+        }
+        
+        async function deleteSale(id) {
+            if (confirm('هل أنت متأكد من حذف هذا البيع؟')) {
+                const result = await apiRequest(`/api/sales/${id}`, { method: 'DELETE' });
+                if (result && result.success) {
+                    showToast('تم الحذف بنجاح');
+                    loadSales(currentPage.sales);
+                    loadStats();
+                }
+            }
+        }
+        
+        // Contacts functions
+        async function loadContacts(page) {
+            currentPage.contacts = page;
+            const search = document.getElementById('contactsSearch')?.value || '';
+            const data = await apiRequest(`/api/contacts?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
+            
+            if (data) {
+                const tbody = document.getElementById('contactsTableBody');
+                tbody.innerHTML = '';
+                data.contacts.forEach(contact => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = contact.name;
+                    row.insertCell(1).textContent = contact.email;
+                    row.insertCell(2).textContent = contact.phone;
+                    row.insertCell(3).textContent = contact.message.substring(0, 50);
+                    const deleteCell = row.insertCell(4);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'حذف';
+                    deleteBtn.className = 'btn-danger';
+                    deleteBtn.onclick = () => deleteContact(contact.id);
+                    deleteCell.appendChild(deleteBtn);
+                });
+                
+                renderPagination('contactsPagination', data.page, data.totalPages, loadContacts);
+            }
+        }
+        
+        async function deleteContact(id) {
+            if (confirm('هل أنت متأكد من حذف هذه الرسالة؟')) {
+                const result = await apiRequest(`/api/contacts/${id}`, { method: 'DELETE' });
+                if (result && result.success) {
+                    showToast('تم الحذف بنجاح');
+                    loadContacts(currentPage.contacts);
+                    loadStats();
+                }
+            }
+        }
+        
+        // Bookings functions
+        async function loadBookings(page) {
+            currentPage.bookings = page;
+            const search = document.getElementById('bookingsSearch')?.value || '';
+            const data = await apiRequest(`/api/bookings?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
+            
+            if (data) {
+                const tbody = document.getElementById('bookingsTableBody');
+                tbody.innerHTML = '';
+                data.bookings.forEach(booking => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = booking.name;
+                    row.insertCell(1).textContent = booking.phone;
+                    row.insertCell(2).textContent = booking.date;
+                    row.insertCell(3).textContent = booking.time;
+                    const deleteCell = row.insertCell(4);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'حذف';
+                    deleteBtn.className = 'btn-danger';
+                    deleteBtn.onclick = () => deleteBooking(booking.id);
+                    deleteCell.appendChild(deleteBtn);
+                });
+                
+                renderPagination('bookingsPagination', data.page, data.totalPages, loadBookings);
+            }
+        }
+        
+        async function deleteBooking(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الحجز؟')) {
+                const result = await apiRequest(`/api/bookings/${id}`, { method: 'DELETE' });
+                if (result && result.success) {
+                    showToast('تم الحذف بنجاح');
+                    loadBookings(currentPage.bookings);
+                    loadStats();
+                }
+            }
+        }
+        
+        // Results functions
+        let selectedFile = null;
+        
+        function handleFileSelect(file) {
+            selectedFile = file;
+            showToast(`تم اختيار الملف: ${file.name}`);
+        }
+        
+        document.getElementById('dropZone').addEventListener('dragover', (e) => {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.add('drag-over');
         });
-      });
-      
-      await switchToPage('dashboard');
-    });
-  </script>
+        
+        document.getElementById('dropZone').addEventListener('dragleave', () => {
+            document.getElementById('dropZone').classList.remove('drag-over');
+        });
+        
+        document.getElementById('dropZone').addEventListener('drop', (e) => {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileSelect(file);
+        });
+        
+        async function uploadResult() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            
+            if (!phoneNumber) {
+                showToast('الرجاء إدخال رقم الهاتف', true);
+                return;
+            }
+            
+            if (!selectedFile) {
+                showToast('الرجاء اختيار ملف', true);
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('file', selectedFile);
+            
+            const response = await fetch('/api/upload-result', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                showToast('تم رفع النتيجة بنجاح');
+                document.getElementById('phoneNumber').value = '';
+                selectedFile = null;
+                document.getElementById('fileInput').value = '';
+                loadResults(1);
+                loadStats();
+            } else {
+                showToast(result.error || 'حدث خطأ', true);
+            }
+        }
+        
+        async function loadResults(page) {
+            currentPage.results = page;
+            const search = document.getElementById('resultsSearch')?.value || '';
+            const data = await apiRequest(`/api/results?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
+            
+            if (data) {
+                const tbody = document.getElementById('resultsTableBody');
+                tbody.innerHTML = '';
+                data.results.forEach(result => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = result.phoneNumber;
+                    const link = document.createElement('a');
+                    link.href = result.fileUrl;
+                    link.textContent = 'تحميل';
+                    link.target = '_blank';
+                    link.style.color = '#667eea';
+                    row.insertCell(1).appendChild(link);
+                    row.insertCell(2).textContent = new Date(result.uploadedAt).toLocaleDateString('ar');
+                    const deleteCell = row.insertCell(3);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'حذف';
+                    deleteBtn.className = 'btn-danger';
+                    deleteBtn.onclick = () => deleteResult(result.id);
+                    deleteCell.appendChild(deleteBtn);
+                });
+                
+                renderPagination('resultsPagination', data.page, data.totalPages, loadResults);
+            }
+        }
+        
+        async function deleteResult(id) {
+            if (confirm('هل أنت متأكد من حذف هذه النتيجة؟')) {
+                const result = await apiRequest(`/api/results/${id}`, { method: 'DELETE' });
+                if (result && result.success) {
+                    showToast('تم الحذف بنجاح');
+                    loadResults(currentPage.results);
+                    loadStats();
+                }
+            }
+        }
+        
+        // Email functions
+        async function sendEmail() {
+            const userEmail = document.getElementById('userEmail').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            if (!userEmail || !message) {
+                showToast('الرجاء ملء جميع الحقول', true);
+                return;
+            }
+            
+            const result = await apiRequest('/api/send-email', {
+                method: 'POST',
+                body: JSON.stringify({ userEmail, message })
+            });
+            
+            if (result && result.success) {
+                showToast('تم إرسال البريد بنجاح');
+                document.getElementById('userEmail').value = '';
+                document.getElementById('emailMessage').value = '';
+                loadEmails(1);
+            } else {
+                showToast(result?.error || 'حدث خطأ', true);
+            }
+        }
+        
+        async function loadEmails(page) {
+            currentPage.emails = page;
+            const search = document.getElementById('emailsSearch')?.value || '';
+            const data = await apiRequest(`/api/emails?page=${page}&limit=10&search=${encodeURIComponent(search)}`);
+            
+            if (data) {
+                const tbody = document.getElementById('emailsTableBody');
+                tbody.innerHTML = '';
+                data.emails.forEach(email => {
+                    const row = tbody.insertRow();
+                    row.insertCell(0).textContent = email.userEmail;
+                    row.insertCell(1).textContent = email.message.substring(0, 50);
+                    row.insertCell(2).textContent = new Date(email.sentAt).toLocaleDateString('ar');
+                    const deleteCell = row.insertCell(3);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'حذف';
+                    deleteBtn.className = 'btn-danger';
+                    deleteBtn.onclick = () => deleteEmail(email.id);
+                    deleteCell.appendChild(deleteBtn);
+                });
+                
+                renderPagination('emailsPagination', data.page, data.totalPages, loadEmails);
+            }
+        }
+        
+        async function deleteEmail(id) {
+            if (confirm('هل أنت متأكد من حذف هذه الرسالة؟')) {
+                const result = await apiRequest(`/api/emails/${id}`, { method: 'DELETE' });
+                if (result && result.success) {
+                    showToast('تم الحذف بنجاح');
+                    loadEmails(currentPage.emails);
+                }
+            }
+        }
+        
+        // Pagination helper
+        function renderPagination(containerId, currentPage, totalPages, loadFunction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            if (totalPages <= 1) return;
+            
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                if (i === currentPage) btn.classList.add('active');
+                btn.onclick = () => loadFunction(i);
+                container.appendChild(btn);
+            }
+            
+            if (totalPages > 5) {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                container.appendChild(dots);
+                
+                const lastBtn = document.createElement('button');
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => loadFunction(totalPages);
+                container.appendChild(lastBtn);
+            }
+        }
+        
+        // Navigation
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+        
+        // Menu navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`${section}Section`).classList.add('active');
+                document.getElementById('sectionTitle').textContent = item.querySelector('span').textContent;
+                
+                // Load section data
+                if (section === 'home') loadStats();
+                else if (section === 'sales') loadSales(1);
+                else if (section === 'contacts') loadContacts(1);
+                else if (section === 'bookings') loadBookings(1);
+                else if (section === 'results') loadResults(1);
+                else if (section === 'emails') loadEmails(1);
+            });
+        });
+        
+        // Initial load
+        loadStats();
+        loadSales(1);
+        
+        // Check saved dark mode
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // Responsive menu toggle
+        if (window.innerWidth <= 768) {
+            document.querySelector('.menu-toggle').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
