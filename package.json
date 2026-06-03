@@ -1,7 +1,7 @@
 {
-  "name": "bedaya-platform",
+  "name": "bedaya-center",
   "version": "1.0.0",
-  "description": "منصة إدارة الأعمال المتكاملة",
+  "description": "Professional Center for Early Intervention and Rehabilitation",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,17 +9,13 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3",
+    "firebase-admin": "^11.11.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "firebase-admin": "^11.11.0",
-    "multer": "^1.4.5-lts.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
-    "cookie-parser": "^1.4.6",
-    "helmet": "^7.1.0",
-    "compression": "^1.7.4",
-    "morgan": "^1.10.0"
+    "express-rate-limit": "^7.1.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
