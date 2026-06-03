@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - بداية للتدخل المبكر والتأهيل</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="تسجيل الدخول إلى لوحة تحكم مركز بداية للتدخل المبكر والتأهيل">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <!-- Logo for SMTP -->
+  <meta property="og:image" content="https://i.postimg.cc/PqYGJKTd/Logo.jpg">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  
+  <style>
+    * {
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark .glass {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Loading spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      margin-left: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-emerald-900 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
+  
+  <div class="min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full">
+      <!-- Logo -->
+      <div class="text-center mb-8 animate-float">
+        <img src="https://i.postimg.cc/PqYGJKTd/Logo.jpg" alt="بداية للتدخل المبكر والتأهيل" class="w-24 h-24 rounded-full mx-auto border-4 border-white shadow-2xl object-cover">
+        <h2 class="mt-6 text-3xl font-bold text-white">مرحباً بعودتك</h2>
+        <p class="mt-2 text-white/70">سجل الدخول إلى لوحة التحكم</p>
+      </div>
+      
+      <!-- Login Form -->
+      <div class="glass rounded-2xl shadow-2xl p-8">
+        <form id="loginForm">
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-white mb-2">
+                <i class="fas fa-user ml-2"></i>
+                اسم المستخدم
+              </label>
+              <input type="text" id="username" required 
+                     class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                     placeholder="أدخل اسم المستخدم">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-semibold text-white mb-2">
+                <i class="fas fa-lock ml-2"></i>
+                كلمة المرور
+              </label>
+              <div class="relative">
+                <input type="password" id="password" required 
+                       class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                       placeholder="••••••••">
+                <button type="button" id="togglePassword" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white transition-colors">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" id="showPassword" class="rounded border-white/20 bg-white/10 text-indigo-600 focus:ring-indigo-500">
+                <span class="mr-2 text-sm text-white/70">إظهار كلمة المرور</span>
+              </label>
+              <a href="#" id="forgotPassword" class="text-sm text-indigo-300 hover:text-indigo-200 transition-colors">
+                نسيت كلمة المرور؟
+              </a>
+            </div>
+            
+            <button type="submit" id="loginSubmit" 
+                    class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-semibold transition-all transform hover:scale-[1.02] shadow-lg">
+              <i class="fas fa-sign-in-alt ml-2"></i>
+              تسجيل الدخول
+            </button>
+          </div>
+        </form>
+        
+        <div class="mt-6 text-center">
+          <p class="text-white/60 text-sm">© 2025 بداية للتدخل المبكر والتأهيل</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Theme Toggle -->
+  <button id="themeToggle" class="fixed bottom-6 right-6 z-50 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center justify-center">
+    <i id="themeIcon" class="fas fa-moon text-white text-xl"></i>
+  </button>
+  
+  <script>
+    // Toast notification system
+    function showToast(message, type = 'success') {
+      const colors = {
+        success: 'linear-gradient(to right, #10b981, #059669)',
+        error: 'linear-gradient(to right, #ef4444, #dc2626)',
+        info: 'linear-gradient(to right, #3b82f6, #2563ed)',
+        warning: 'linear-gradient(to right, #f59e0b, #d97706)'
+      };
+      
+      Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "left",
+        backgroundColor: colors[type],
+        className: "rounded-xl shadow-lg",
+        stopOnFocus: true,
+        rtl: true
+      }).showToast();
+    }
+    
+    // Check for existing token
+    if (localStorage.getItem('adminToken')) {
+      window.location.href = '/dashboard';
+    }
+    
+    // Dark Mode Management
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', isDark);
+      if (isDark) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    });
+    
+    // Toggle Password Visibility
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const showPasswordCheckbox = document.getElementById('showPassword');
+    
+    function togglePasswordVisibility() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      const icon = togglePasswordBtn.querySelector('i');
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+    
+    togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
+    
+    showPasswordCheckbox.addEventListener('change', (e) => {
+      passwordInput.type = e.target.checked ? 'text' : 'password';
+      const icon = togglePasswordBtn.querySelector('i');
+      if (e.target.checked) {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+    
+    // Login Form Handler
+    const loginForm = document.getElementById('loginForm');
+    const loginSubmit = document.getElementById('loginSubmit');
+    
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!username || !password) {
+        showToast('يرجى إدخال اسم المستخدم وكلمة المرور', 'error');
+        return;
+      }
+      
+      // Show loading state
+      const originalText = loginSubmit.innerHTML;
+      loginSubmit.innerHTML = '<div class="loading-spinner"></div> جاري تسجيل الدخول...';
+      loginSubmit.disabled = true;
+      
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.token) {
+          // Save token
+          localStorage.setItem('adminToken', data.token);
+          
+          // Verify token before redirect
+          const verifyResponse = await fetch('/api/admin/verify-token', {
+            headers: {
+              'Authorization': `Bearer ${data.token}`
+            }
+          });
+          
+          if (verifyResponse.ok) {
+            showToast('تم تسجيل الدخول بنجاح! جاري التحويل...', 'success');
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 1000);
+          } else {
+            showToast('فشل التحقق من الصلاحية', 'error');
+            localStorage.removeItem('adminToken');
+          }
+        } else {
+          showToast(data.error || 'اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showToast('تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً', 'error');
+      } finally {
+        loginSubmit.innerHTML = originalText;
+        loginSubmit.disabled = false;
+      }
+    });
+    
+    // Forgot Password
+    document.getElementById('forgotPassword').addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('يرجى التواصل مع مدير النظام على admin@bedaya.com', 'info');
+    });
+  </script>
+</body>
+</html>
